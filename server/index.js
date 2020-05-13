@@ -5,20 +5,25 @@ const app = express()
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
-config.dev = process.env.NODE_ENV !== 'production'
+const { dev, mongo } = require('./config/index')
+config.dev = dev
 
 async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
-
   const { host, port } = nuxt.options.server
-
   await nuxt.ready()
+
   // Build only in dev mode
-  if (config.dev) {
+  if (dev) {
     const builder = new Builder(nuxt)
+    // const swagger = require('./routes/api/v1.0.0/swagger')
     await builder.build()
+    // app.use('/api-docs', swagger)
   }
+
+  // Init MongoDB
+  await mongo.init()
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
