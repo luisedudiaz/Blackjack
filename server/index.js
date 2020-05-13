@@ -1,5 +1,6 @@
 const express = require('express')
 const consola = require('consola')
+const bodyParser = require('body-parser')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
@@ -21,6 +22,10 @@ async function start() {
     await builder.build()
     // app.use('/api-docs', swagger)
   }
+
+  // Bodyparser configuration
+  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(bodyParser.json())
 
   // Init MongoDB
   await mongo.init()

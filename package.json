@@ -34,7 +34,8 @@
     "express": "^4.16.4",
     "mongoose": "^5.9.13",
     "nuxt": "^2.0.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "body-parser": "latest"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",
