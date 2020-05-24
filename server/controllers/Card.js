@@ -1,7 +1,5 @@
 const cardController = {}
 
-cardController.getCards = (req, res) => {
-
-}
+cardController.getCards = (req, res) => {}
 
 module.exports = cardController
