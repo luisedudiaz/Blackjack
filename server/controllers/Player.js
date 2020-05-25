@@ -8,24 +8,27 @@ const playerController = {}
  * Creates the house player
  */
 playerController.createHousePlayer = (req, res) => {
+  const id = new mongoose.Types.ObjectId()
   const housePlayer = new Player({
-    _id: new mongoose.Types.ObjectId(),
-    name: 'House',
+    _id: id,
+    name: `House-${id}`,
     deck: [],
     isPlaying: true
   })
   housePlayer
     .save()
-    .then(() => {
-      res.status(200).send({
+    .then((data) => {
+      res.json({
         success: true,
-        response: 'House player created'
+        status: 200,
+        message: 'House player created',
+        response: data
       })
     })
     .catch((e) => {
-      console.log(e)
-      res.status(500).send({
+      res.json({
         success: false,
+        status: 500,
         response: e
       })
     })
@@ -35,17 +38,21 @@ playerController.createHousePlayer = (req, res) => {
  * Return the house player
  */
 playerController.getHousePlayer = (req, res) => {
-  Player.findOne({ name: 'House' })
-    .then((player) => {
-      res.status(200).send({
+  const houseId = req.query.id
+  Player.findById(houseId)
+    .then((data) => {
+      res.json({
         success: true,
-        response: player
+        status: 200,
+        message: 'House player found, have fun',
+        response: data
       })
     })
     .catch(() => {
-      res.status(500).send({
+      res.json({
         success: false,
-        response: 'Something went wrong'
+        response: 'Something went wrong',
+        status: 500
       })
     })
 }
