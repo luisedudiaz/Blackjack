@@ -9,7 +9,7 @@ const CardShema = new Schema({
   },
   suit: {
     type: String,
-    enum: ['', '', '', ''],
+    enum: ['Hearts', 'Spades', 'Diamonds', 'Clubs'],
     required: true
   }
 })

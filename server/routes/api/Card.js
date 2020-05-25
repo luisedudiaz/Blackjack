@@ -3,8 +3,10 @@ const router = express.Router()
 
 const card = require('../../controllers/Card')
 
-router.get('/', card.getCards)
+router.get('/', card.getDeck)
 
-router.get('/', card.getCard)
+router.get('/card', card.getCard)
+
+router.post('/', card.createDeck)
 
 module.exports = router
