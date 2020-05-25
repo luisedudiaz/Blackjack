@@ -1,6 +1,5 @@
-const randomCardNumber = () => {
-  const MAX_CARDS = 52
-  return Math.floor(Math.random() * MAX_CARDS)
+const randomCardNumber = (deckLength) => {
+  return Math.floor(Math.random() * deckLength)
 }
 
 module.exports = { randomCardNumber }

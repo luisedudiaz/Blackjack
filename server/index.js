@@ -30,6 +30,10 @@ async function start() {
   // Init MongoDB
   await mongo.init()
 
+  // Routes
+  const card = require('./routes/api/Card')
+  app.use('/api/cards', card)
+
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
