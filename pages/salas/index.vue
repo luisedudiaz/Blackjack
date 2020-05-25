@@ -25,8 +25,7 @@ export default {
         { isActive: false, no: 21, name: 'Larsen' },
         { isActive: false, no: 89, name: 'Geneva' },
         { isActive: true, no: 38, name: 'Jami' }
-      ],
-      status: 400
+      ]
     }
   }
 }
