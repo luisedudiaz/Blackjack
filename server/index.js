@@ -30,6 +30,14 @@ async function start() {
   // Init MongoDB
   await mongo.init()
 
+  // Routes
+  const card = require('./routes/api/Card')
+  const player = require('./routes/api/Player')
+  const game = require('./routes/api/Game')
+  app.use('/api/cards', card)
+  app.use('/api/players', player)
+  app.use('/api/games', game)
+
   // Give nuxt middleware to express
   app.use(nuxt.render)
 

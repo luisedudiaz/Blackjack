@@ -1,5 +1,5 @@
-const randomNumbers = () => {}
+const randomCardNumber = (deckLength) => {
+  return Math.floor(Math.random() * deckLength)
+}
 
-const randomSuit = () => {}
-
-module.exports = { randomNumbers, randomSuit }
+module.exports = { randomCardNumber }

@@ -53,7 +53,12 @@ module.exports = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    proxy: true,
+    credentials: true,
+    debug: true,
+    prefix: '/api'
+  },
   /*
    ** Build configuration
    */
