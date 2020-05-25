@@ -32,7 +32,9 @@ async function start() {
 
   // Routes
   const card = require('./routes/api/Card')
+  const player = require('./routes/api/Player')
   app.use('/api/cards', card)
+  app.use('/api/players', player)
 
   // Give nuxt middleware to express
   app.use(nuxt.render)

@@ -11,10 +11,9 @@ playerController.createHousePlayer = (req, res) => {
   const housePlayer = new Player({
     _id: new mongoose.Types.ObjectId(),
     name: 'House',
-    deck: '',
-    isPlaying: 1
+    deck: [],
+    isPlaying: true
   })
-
   housePlayer
     .save()
     .then(() => {
@@ -23,10 +22,11 @@ playerController.createHousePlayer = (req, res) => {
         response: 'House player created'
       })
     })
-    .catch(() => {
+    .catch((e) => {
+      console.log(e)
       res.status(500).send({
         success: false,
-        response: 'Something went wrong'
+        response: e
       })
     })
 }
@@ -49,3 +49,5 @@ playerController.getHousePlayer = (req, res) => {
       })
     })
 }
+
+module.exports = playerController
