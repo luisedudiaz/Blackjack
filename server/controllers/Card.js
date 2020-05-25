@@ -16,12 +16,14 @@ cardController.getDeck = async (req, res) => {
     const deck = await Card.find({})
     return res.json({
       success: true,
+      status: 200,
       message: 'Deck for new game',
       response: { deck }
     })
   } catch (e) {
     res.json({
       success: false,
+      status: 404,
       message: 'Deck not found.',
       response: e
     })
@@ -35,14 +37,20 @@ cardController.getCard = (req, res) => {
   const deck = req.body.deck
   if (deck) {
     const random = randomCardNumber(deck.length)
+    const card = deck[random]
+    const newDeck = deck.filter((e) => e._id !== card._id)
     res.json({
       success: true,
       message: 'Random card',
-      response: { card: deck[random] }
+      response: {
+        card,
+        deck: newDeck
+      }
     })
   } else {
     res.json({
       success: false,
+      status: 404,
       message: 'Deck not provided'
     })
   }
@@ -63,6 +71,7 @@ cardController.createDeck = async (req, res) => {
           } catch (e) {
             res.json({
               success: false,
+              status: 412,
               message: 'Card not created.'
             })
           }
@@ -70,18 +79,21 @@ cardController.createDeck = async (req, res) => {
       })
       res.json({
         success: true,
+        status: 201,
         message: 'Deck already created'
       })
     } else {
       res.json({
         success: false,
+        status: 202,
         message: 'Deck already created'
       })
     }
   } catch (e) {
     res.json({
       success: false,
-      message: '',
+      message: 'Internal server error',
+      status: 500,
       response: e
     })
   }
