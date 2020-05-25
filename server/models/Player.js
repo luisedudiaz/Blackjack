@@ -4,7 +4,7 @@ const cardSchema = mongoose.model('card').schema
 
 const playerSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  nombre: {
+  name: {
     type: String,
     required: true
   },
