@@ -11,6 +11,9 @@
         <NuxtLink class="button--grey" to="/nuevo">
           Crear Sala
         </NuxtLink>
+        <b-button variant="outline-success">
+          Login
+        </b-button>
       </div>
     </div>
   </div>
@@ -26,9 +29,14 @@
   text-align: center;
 }
 
+@font-face {
+  font-family: Cinzel;
+  src: url('~assets/Cinzel-Black.ttf');
+}
+
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /*font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;*/
   display: block;
   font-weight: 300;
   font-size: 100px;
