@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const card = require('../../controllers/Card')
+const { card } = require('../../controllers/Card')
 
 router.get('/', card.getDeck)
 

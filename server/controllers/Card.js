@@ -8,12 +8,20 @@ const Card = mongoose.model('card')
 const SUITS = ['Hearts', 'Spades', 'Diamonds', 'Clubs']
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
+/*
+ * Helper function
+ * Returns all cards promise
+ */
+function getDeckPromise() {
+  return Card.find({})
+}
+
 /**
  * Return all cards (52 cards).
  */
 cardController.getDeck = async (req, res) => {
   try {
-    const deck = await Card.find({})
+    const deck = await getDeckPromise()
     return res.json({
       success: true,
       status: 200,
@@ -99,4 +107,4 @@ cardController.createDeck = async (req, res) => {
   }
 }
 
-module.exports = cardController
+module.exports = { card: cardController, deckPromise: getDeckPromise }

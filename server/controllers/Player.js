@@ -5,9 +5,9 @@ const Player = mongoose.model('player')
 const playerController = {}
 
 /*
- * Creates the house player
+ * Helper function to create the house player {Returns promise}
  */
-playerController.createHousePlayer = (req, res) => {
+function createHousePromise() {
   const id = new mongoose.Types.ObjectId()
   const housePlayer = new Player({
     _id: id,
@@ -15,8 +15,16 @@ playerController.createHousePlayer = (req, res) => {
     deck: [],
     isPlaying: true
   })
+
+  return housePlayer.save()
+}
+
+/*
+ * Creates the house player
+ */
+playerController.createHousePlayer = (req, res) => {
+  const housePlayer = createHousePromise()
   housePlayer
-    .save()
     .then((data) => {
       res.json({
         success: true,
@@ -25,11 +33,11 @@ playerController.createHousePlayer = (req, res) => {
         response: data
       })
     })
-    .catch((e) => {
+    .catch((error) => {
       res.json({
         success: false,
         status: 500,
-        response: e
+        response: error
       })
     })
 }
@@ -57,4 +65,7 @@ playerController.getHousePlayer = (req, res) => {
     })
 }
 
-module.exports = playerController
+module.exports = {
+  player: playerController,
+  housePlayerPromise: createHousePromise
+}

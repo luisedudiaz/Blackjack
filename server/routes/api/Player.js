@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const player = require('../../controllers/Player')
+const { player } = require('../../controllers/Player')
 
 router.get('/')
 
