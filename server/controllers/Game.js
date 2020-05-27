@@ -1,22 +1,38 @@
-const mongoose = require('mongoose')
 require('../models/Game')
+const mongoose = require('mongoose')
+const { housePlayerPromise } = require('./Player')
+const { deckPromise } = require('./Card')
 const gameController = {}
 
 const Game = mongoose.model('game')
 
 /*
- * Inserts a new game object into the db
+ * Creates game and returns its id
  */
-gameController.createGame = (req, res) => {
+gameController.createGame = async (req, res) => {
   const player = req.body.player
-  const house = req.body.house
-  const cards = req.body.deck
+  let housePlayer = null
+  let cards = null
 
-  if (!player || !house || !cards) {
-    res.json({
+  if (!player) {
+    return res.json({
       success: false,
       status: 422,
-      message: 'Missing data to process request'
+      message: 'Missing data player data to process request'
+    })
+  }
+
+  try {
+    const data = await Promise.all([housePlayerPromise(), deckPromise()])
+    housePlayer = data[0]
+    cards = data[1]
+  } catch (e) {
+    res.json({
+      success: false,
+      status: 500,
+      message:
+        'Oh no! something went wrong when creating the elements for the game',
+      response: { e }
     })
   }
 
@@ -24,8 +40,8 @@ gameController.createGame = (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     deck: cards,
     winner: '',
-    players: [house, player],
-    turn: house,
+    players: [housePlayer, player],
+    turn: housePlayer,
     status: 1
   })
 
@@ -41,12 +57,12 @@ gameController.createGame = (req, res) => {
         }
       })
     })
-    .catch((err) => {
+    .catch((e) => {
       res.json({
         success: false,
         status: 500,
-        message: 'Oh no, something went wrong!',
-        response: err
+        message: 'Oh no, something went wrong creating the game',
+        response: e
       })
     })
 }
