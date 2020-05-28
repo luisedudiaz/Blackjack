@@ -1,6 +1,11 @@
 <template>
   <div>
     <b-table striped hover :items="items" :fields="fields">
+      <template v-slot:cell(name)="data">
+        <h2>
+          {{ data.item.name + data.item.no }}
+        </h2>
+      </template>
       <template v-slot:cell(no)="data">
         <NuxtLink :to="`/salas/${data.item.no}`"
           ><b-button variant="success">{{ data.item.no }}</b-button></NuxtLink
