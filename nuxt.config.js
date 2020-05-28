@@ -38,6 +38,13 @@ module.exports = {
     '@nuxtjs/stylelint-module'
   ],
   /*
+   ** Router configurations.
+   */
+  router: {
+    // Global Auth Configuration
+    middleware: ['auth']
+  },
+  /*
    ** Nuxt.js modules
    */
   modules: [
@@ -45,6 +52,8 @@ module.exports = {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    // Doc: https://auth.nuxtjs.org/guide/setup.html
+    '@nuxtjs/auth',
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv'
@@ -58,6 +67,29 @@ module.exports = {
     credentials: true,
     debug: true,
     prefix: '/api'
+  },
+  /*
+   ** Auth module configuration
+   ** See https://auth.nuxtjs.org
+   */
+  auth: {
+    strategies: {
+      google: {
+        _scheme: 'oauth2',
+        authorization_endpoint: 'https://accounts.google.com/o/oauth2/auth',
+        userinfo_endpoint: 'https://www.googleapis.com/oauth2/v3/userinfo',
+        scope: ['openid', 'profile', 'email'],
+        client_id:
+          '162840697953-1hgtpumhl1et4te1tip5s5r6hp64neqc.apps.googleusercontent.com'
+      }
+    },
+    redirect: {
+      login: '/',
+      logout: '/',
+      callback: '/',
+      home: '/'
+    },
+    rewriteRedirects: false
   },
   /*
    ** Build configuration
