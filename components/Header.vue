@@ -3,7 +3,14 @@
     <b-button v-b-toggle.sidebar class="bj-red" size="lg" variant="danger">
       <b-icon variant="light" scale="1.5" icon="list"></b-icon>
     </b-button>
-    <b-sidebar id="sidebar">
+    <b-sidebar
+      id="sidebar"
+      bg-variant="dark"
+      shadow="sm"
+      sidebar-class="border-right border-white"
+      width="250px"
+    >
+      <b-img src="~assets/menu-blackjack.jpg" fluid thumbnail></b-img>
       <template v-slot:footer>
         <div
           v-if="$auth.loggedIn"
