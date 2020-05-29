@@ -23,7 +23,7 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: ['~/static/css/main.css'],
+  css: ['~static/css/main.css'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -75,10 +75,6 @@ module.exports = {
   auth: {
     strategies: {
       google: {
-        _scheme: 'oauth2',
-        authorization_endpoint: 'https://accounts.google.com/o/oauth2/auth',
-        userinfo_endpoint: 'https://www.googleapis.com/oauth2/v3/userinfo',
-        scope: ['openid', 'profile', 'email'],
         client_id:
           '162840697953-1hgtpumhl1et4te1tip5s5r6hp64neqc.apps.googleusercontent.com'
       }
@@ -86,10 +82,10 @@ module.exports = {
     redirect: {
       login: '/',
       logout: '/',
-      callback: '/',
+      callback: '/login',
       home: '/'
     },
-    rewriteRedirects: false
+    rewriteRedirects: true
   },
   /*
    ** Build configuration
