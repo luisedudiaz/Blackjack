@@ -21,8 +21,9 @@
             block
             variant="danger"
             @click="$auth.logout()"
-            >Cerrar Sesión</b-button
           >
+            <b-icon variant="light" icon="person-square"></b-icon>Cerrar Sesión
+          </b-button>
         </div>
         <div v-else class="d-flex  text-light align-items-center px-3 py-2">
           <b-button
@@ -30,8 +31,9 @@
             block
             variant="danger"
             @click="$auth.loginWith('google')"
-            >Iniciar Sesión</b-button
           >
+            <b-icon variant="light" icon="person-square"></b-icon>Iniciar Sesión
+          </b-button>
         </div>
       </template>
       <div v-if="$auth.loggedIn">
@@ -39,8 +41,14 @@
           class="d-flex text-light align-items-center px-3 py-2"
           vertical
         >
-          <b-button block to="/salas">Salas</b-button>
-          <b-button block to="/nuevo">Crear Sala</b-button>
+          <b-button size="sm" class="mb-2" block to="/salas">
+            <b-icon variant="light" icon="forward"></b-icon>
+            Salas
+          </b-button>
+          <b-button size="sm" class="mb-2" lock to="/nuevo">
+            <b-icon variant="light" icon="pencil-square"></b-icon>
+            Crear Sala
+          </b-button>
         </b-button-group>
       </div>
     </b-sidebar>
@@ -48,12 +56,24 @@
 </template>
 
 <script>
-import { BIcon, BIconList } from 'bootstrap-vue'
+import {
+  BIcon,
+  BIconGem,
+  BIconForward,
+  BIconPencilSquare,
+  BIconPersonSquare
+} from 'bootstrap-vue'
 export default {
   components: {
     BIcon,
     // eslint-disable-next-line vue/no-unused-components
-    BIconList
+    BIconGem,
+    // eslint-disable-next-line vue/no-unused-components
+    BIconForward,
+    // eslint-disable-next-line vue/no-unused-components
+    BIconPencilSquare,
+    // eslint-disable-next-line vue/no-unused-components
+    BIconPersonSquare
   }
 }
 </script>
