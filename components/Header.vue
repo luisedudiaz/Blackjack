@@ -1,16 +1,16 @@
 <template>
   <div class="position-absolute m-3">
     <b-button v-b-toggle.sidebar class="bj-red" size="lg" variant="danger">
-      <b-icon variant="light" scale="1.5" icon="list"></b-icon>
+      <b-icon variant="light" scale="1.5" icon="gem"></b-icon>
     </b-button>
     <b-sidebar
       id="sidebar"
+      :title="$auth.user ? $auth.user.name : ''"
       bg-variant="dark"
       shadow="sm"
       sidebar-class="border-right border-white"
       width="250px"
     >
-      <b-img src="~assets/menu-blackjack.jpg" fluid thumbnail></b-img>
       <template v-slot:footer>
         <div
           v-if="$auth.loggedIn"
@@ -58,4 +58,22 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+#sidebar .b-sidebar-header {
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.3) 100%
+    ),
+    url('~assets/menu-blackjack3.jpg');
+  height: 50%;
+}
+
+#sidebar .b-sidebar-header button {
+  color: #b30606;
+}
+
+#sidebar #sidebar___title__ {
+  color: white;
+}
+</style>
