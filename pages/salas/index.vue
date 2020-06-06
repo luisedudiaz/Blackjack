@@ -3,16 +3,16 @@
     <div class="background">
       <div class="container">
         <b-table striped hover :items="items" :fields="fields">
-          <template v-slot:cell(name)="data">
+          <template v-slot:cell(id)="data">
             <h2>
-              {{ data.item.name + data.item.no }}
+              {{ data.item.id + data.item.participants }}
             </h2>
           </template>
-          <template v-slot:cell(no)="data">
-            <NuxtLink :to="`/salas/${data.item.no}`"
-              ><b-button variant="success">{{
-                data.item.no
-              }}</b-button></NuxtLink
+          <template v-slot:cell(access)="data">
+            <NuxtLink :to="`/salas/${data.item.id}`"
+              ><b-button variant="success">
+                <p>Ir a sala</p>
+              </b-button></NuxtLink
             >
           </template>
         </b-table>
@@ -26,16 +26,17 @@ export default {
   data() {
     return {
       // Note `isActive` is left out and will not appear in the rendered table
-      fields: ['name', 'no'],
+      fields: ['id', 'participants', 'access'],
       items: [
         {
           isActive: true,
-          no: 40,
-          name: 'Dickerson'
+          id: 123,
+          participants: 4,
+          access: 'Ir a sala'
         },
-        { isActive: false, no: 21, name: 'Larsen' },
-        { isActive: false, no: 89, name: 'Geneva' },
-        { isActive: true, no: 38, name: 'Jami' }
+        { isActive: false, participants: 7, id: 456, access: 'Ir a sala' },
+        { isActive: false, participants: 7, id: 789, access: 'Ir a sala' },
+        { isActive: true, participants: 2, id: 147, access: 'Ir a sala' }
       ]
     }
   }
