@@ -2,20 +2,37 @@
   <div>
     <div class="background">
       <div class="container">
-        <b-table striped hover :items="items" :fields="fields">
-          <template v-slot:cell(id)="data">
-            <h2>
-              {{ data.item.id + data.item.participants }}
-            </h2>
-          </template>
-          <template v-slot:cell(access)="data">
-            <NuxtLink :to="`/salas/${data.item.id}`"
-              ><b-button variant="success">
-                <p>Ir a sala</p>
-              </b-button></NuxtLink
-            >
-          </template>
-        </b-table>
+        <div>
+          <h1 class="title">
+            Salas
+          </h1>
+          <b-table
+            striped
+            hover
+            :items="items"
+            :fields="fields"
+            :tbody-tr-class="rowClass"
+          >
+            <template v-slot:cell(id)="data">
+              <h2>
+                {{ data.item.id + data.item.participants }}
+              </h2>
+            </template>
+            <template v-slot:cell(access)="data">
+              <NuxtLink :to="`/salas/${data.item.id}`"
+                ><b-button
+                  size="sm"
+                  class="mb-2"
+                  variant="success"
+                  block
+                  to="/salas"
+                >
+                  Ir a Sala
+                </b-button></NuxtLink
+              >
+            </template>
+          </b-table>
+        </div>
       </div>
     </div>
   </div>
@@ -76,5 +93,17 @@ export default {
   /* Set a background color that will be displayed
        while the background image is loading */
   background-color: #464646;
+}
+@font-face {
+  font-family: Cinzel;
+  src: url('~assets/Cinzel-Black.ttf');
+}
+
+.title {
+  font-family: Cinzel, serif;
+  font-weight: 300;
+  font-size: 100px;
+  color: #b30606;
+  letter-spacing: 1px;
 }
 </style>
