@@ -10,6 +10,8 @@
             striped
             hover
             :items="items"
+            class="text-white"
+            thead-class="green-bg bg-dark text-white"
             :fields="fields"
             :tbody-tr-class="rowClass"
           >
