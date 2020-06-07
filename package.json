@@ -37,7 +37,9 @@
     "express": "^4.16.4",
     "mongoose": "^5.9.13",
     "nuxt": "^2.0.0",
-    "swagger-ui-express": "^4.1.4"
+    "socket.io": "^2.3.0",
+    "swagger-ui-express": "^4.1.4",
+    "vue-socket.io": "^3.0.9"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",
