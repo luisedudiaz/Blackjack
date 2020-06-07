@@ -10,6 +10,8 @@
       shadow="sm"
       sidebar-class="border-right border-white"
       width="250px"
+      lazy
+      backdrop
     >
       <template v-slot:footer>
         <div
@@ -22,7 +24,7 @@
             variant="danger"
             @click="$auth.logout()"
           >
-            <b-icon variant="light" icon="person-square"></b-icon>Cerrar Sesión
+            <b-icon variant="light" icon="person-square"></b-icon> Cerrar Sesión
           </b-button>
         </div>
         <div v-else class="d-flex  text-light align-items-center px-3 py-2">
@@ -32,11 +34,15 @@
             variant="danger"
             @click="$auth.loginWith('google')"
           >
-            <b-icon variant="light" icon="person-square"></b-icon>Iniciar Sesión
+            <b-icon variant="light" icon="person-square"></b-icon>
+            Iniciar Sesión
           </b-button>
         </div>
       </template>
       <div v-if="$auth.loggedIn">
+        <div class="text-secondary text-center px-3 py-4">
+          <h3>Blackjack</h3>
+        </div>
         <b-button-group
           class="d-flex text-light align-items-center px-3 py-2"
           vertical
@@ -50,6 +56,17 @@
             Crear Sala
           </b-button>
         </b-button-group>
+      </div>
+      <div v-else class="text-light">
+        <div class="px-3 py-4">
+          <h3>Bienvenido</h3>
+        </div>
+        <div class="px-3">
+          <p>
+            Es necesario iniciar sesión para poder crear salas y unirse a alguna
+            sala.
+          </p>
+        </div>
       </div>
     </b-sidebar>
   </div>
