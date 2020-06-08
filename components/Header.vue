@@ -15,19 +15,14 @@
     >
       <template v-slot:footer>
         <div
-          v-if="$auth.loggedIn"
+          v-if="isLogged"
           class="d-flex  text-light align-items-center px-3 py-2"
         >
-          <b-button
-            class="bj-red"
-            block
-            variant="danger"
-            @click="$auth.logout()"
-          >
+          <b-button class="bj-red" block variant="danger" @click="logout">
             <b-icon variant="light" icon="person-square"></b-icon> Cerrar Sesión
           </b-button>
         </div>
-        <div v-else class="d-flex  text-light align-items-center px-3 py-2">
+        <div v-else class="d-flex text-light align-items-center px-3 py-2">
           <b-button
             class="bj-red"
             block
@@ -39,7 +34,7 @@
           </b-button>
         </div>
       </template>
-      <div v-if="$auth.loggedIn">
+      <div v-if="isLogged">
         <div class="text-secondary text-center px-3 py-4">
           <h3>Blackjack</h3>
         </div>
@@ -91,6 +86,47 @@ export default {
     BIconPencilSquare,
     // eslint-disable-next-line vue/no-unused-components
     BIconPersonSquare
+  },
+  data() {
+    return {
+      isLogged: false
+    }
+  },
+  created() {
+    this.isLogged = this.$auth.loggedIn
+    if (this.isLogged) {
+      this.signIn(this.$auth.user.name)
+    }
+  },
+  methods: {
+    signIn(name) {
+      const body = { name }
+      this.$axios
+        .$post('/players/', body)
+        .then((data) => {
+          this.makeToast('success', 'Éxito', 'El inicio de sesión fue exitoso')
+        })
+        .catch(() => {
+          this.makeToast(
+            'danger',
+            'Error',
+            'Ocurrió un error al iniciar sesión'
+          )
+        })
+    },
+    makeToast(varian, titl, msg) {
+      this.$bvToast.toast(msg, {
+        title: titl,
+        variant: varian,
+        autoHideDelay: 3000,
+        appendToast: true
+      })
+    },
+    logout() {
+      this.isLogged = false
+      this.makeToast('success', 'Éxito', 'Se cerró la sesión correctamente')
+      this.$auth.logout()
+    }
   }
 }
 </script>

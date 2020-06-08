@@ -19,17 +19,11 @@
               </h2>
             </template>
             <template v-slot:cell(access)="data">
-              <NuxtLink :to="`/salas/${data.item.id}`"
-                ><b-button
-                  size="sm"
-                  class="mb-2"
-                  variant="success"
-                  block
-                  to="/salas"
-                >
+              <NuxtLink :to="`/salas/${data.item.id}`">
+                <b-button size="sm" class="mb-2" variant="success" block>
                   Ir a Sala
-                </b-button></NuxtLink
-              >
+                </b-button>
+              </NuxtLink>
             </template>
           </b-table>
         </div>

@@ -65,6 +65,46 @@ playerController.getHousePlayer = (req, res) => {
     })
 }
 
+/*
+ * Manages login logic
+ */
+playerController.login = async (req, res) => {
+  try {
+    const user = req.body.name
+    const exists = await Player.exists({ name: user })
+
+    if (exists) {
+      const data = await Player.find({ name: user })
+      return res.json({
+        success: true,
+        status: 200,
+        player: data
+      })
+    } else {
+      const id = new mongoose.Types.ObjectId()
+      const player = new Player({
+        _id: id,
+        name: user,
+        deck: [],
+        isPlaying: false
+      })
+      const data = await player.save()
+      return res.json({
+        success: true,
+        status: 200,
+        player: data
+      })
+    }
+  } catch (e) {
+    res.json({
+      success: false,
+      message: 'Internal server error',
+      status: 500,
+      response: e
+    })
+  }
+}
+
 module.exports = {
   player: playerController,
   housePlayerPromise: createHousePromise
