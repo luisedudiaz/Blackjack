@@ -7,7 +7,7 @@ export const state = () => ({
 export const getters = {}
 
 export const mutations = {
-  setPlayer(state, player) {
+  SET_PLAYER(state, player) {
     state.player = player
   },
   SOCKET_newPlay(state, play) {},
@@ -23,6 +23,9 @@ export const mutations = {
 }
 
 export const actions = {
+  setPlayer({ commit }, player) {
+    commit('SET_PLAYER', player)
+  },
   socketEmit(_, { action, payload }) {
     return this._vm.$socket.emit(action, payload)
   },

@@ -75,6 +75,7 @@ import {
   BIconPencilSquare,
   BIconPersonSquare
 } from 'bootstrap-vue'
+import { mapActions } from 'vuex'
 export default {
   components: {
     BIcon,
@@ -99,11 +100,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions({ setPlayer: 'setPlayer' }),
     signIn(name) {
       const body = { name }
       this.$axios
         .$post('/players/', body)
         .then((data) => {
+          console.log(data)
+          this.setPlayer(data.player)
           this.makeToast('success', 'Éxito', 'El inicio de sesión fue exitoso')
         })
         .catch(() => {
@@ -123,6 +127,7 @@ export default {
       })
     },
     logout() {
+      this.setPlayer({})
       this.isLogged = false
       this.makeToast('success', 'Éxito', 'Se cerró la sesión correctamente')
       this.$auth.logout()
