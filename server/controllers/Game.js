@@ -67,4 +67,23 @@ gameController.createGame = async (req, res) => {
     })
 }
 
+gameController.getGames = (req, res) => {
+  Game.find()
+    .then((data) => {
+      return res.json({
+        success: true,
+        status: 200,
+        games: data,
+        empty: data.length === 0
+      })
+    })
+    .catch(() => {
+      return res.json({
+        success: false,
+        status: 500,
+        message: 'Something went wrong'
+      })
+    })
+}
+
 module.exports = gameController
