@@ -1,8 +1,11 @@
+/* eslint-disable import/order */
 const consola = require('consola')
 const bodyParser = require('body-parser')
 const { Nuxt, Builder } = require('nuxt')
 const config = require('../nuxt.config.js')
-const { app, server } = require('./app')
+const app = require('express')()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
 
 // Import and Set Nuxt.js options
 const { dev, mongo } = require('./config/index')
@@ -40,12 +43,27 @@ async function start() {
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
-  // Listen the server
-  server.listen(port, () => {
-    consola.ready({
-      message: `Server listening on http://${host}:${port}`,
-      badge: true
+  io.on('connection', (socket) => {
+    const exitEvents = ['leftRoom', 'disconnect']
+    socket.on('createUser', (user) => {})
+    socket.on('joinRoom', ({ user, room }) => {})
+    socket.on('play', ({ user, game }) => {})
+    socket.on('setThinkingStatus', ({ room, status, user }) => {})
+    exitEvents.forEach((event) => {
+      socket.on(event, () => {})
     })
   })
+
+  // Listen the server
+  try {
+    server.listen(port, () => {
+      consola.ready({
+        message: `Server listening on http://${host}:${port}`,
+        badge: true
+      })
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 start()
