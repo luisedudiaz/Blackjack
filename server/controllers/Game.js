@@ -11,10 +11,11 @@ const Game = mongoose.model('game')
  */
 gameController.createGame = async (req, res) => {
   const player = req.body.player
+  const socket = req.body.socket
   let housePlayer = null
   let cards = null
 
-  if (!player) {
+  if (!player || !socket) {
     return res.json({
       success: false,
       status: 422,
@@ -42,7 +43,8 @@ gameController.createGame = async (req, res) => {
     winner: '',
     players: [housePlayer, player],
     turn: housePlayer,
-    status: 1
+    status: 1,
+    socket
   })
 
   game
