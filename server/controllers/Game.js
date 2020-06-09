@@ -40,7 +40,7 @@ gameController.createGame = async (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     deck: cards,
     winner: '',
-    players: [housePlayer, player],
+    players: [housePlayer],
     turn: housePlayer,
     status: 1
   })

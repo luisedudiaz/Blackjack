@@ -176,7 +176,7 @@ export const actions = {
   },
   joinRoom({ dispatch, state }, idGame) {
     console.log(idGame)
-    const player = state.player[0]
+    const player = state.player
     dispatch('socketEmit', {
       action: 'joinRoom',
       payload: { player, idGame }

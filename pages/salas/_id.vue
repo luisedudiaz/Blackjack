@@ -18,7 +18,7 @@ export default {
     ...mapActions(['joinRoom'])
   },
   mounted() {
-    this.joinRoom('5edefc6ce8846136a8222364')
+    this.joinRoom(this.$route.params.id)
   }
 }
 </script>
