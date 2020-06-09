@@ -6,13 +6,7 @@
           <h1 class="title">
             Salas
           </h1>
-          <b-table
-            striped
-            hover
-            :items="items"
-            :fields="fields"
-            :tbody-tr-class="rowClass"
-          >
+          <b-table striped hover :items="items" :fields="fields">
             <template v-slot:cell(id)="data">
               <h2>
                 {{ data.item.id + data.item.participants }}

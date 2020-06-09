@@ -106,7 +106,6 @@ export default {
       this.$axios
         .$post('/players/', body)
         .then((data) => {
-          console.log(data)
           this.setPlayer(data.player)
           this.makeToast('success', 'Éxito', 'El inicio de sesión fue exitoso')
         })
