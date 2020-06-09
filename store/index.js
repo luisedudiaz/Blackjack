@@ -10,7 +10,9 @@ export const mutations = {
     state.player = player
   },
   SOCKET_newPlay(state, play) {},
-  SOCKET_updatePlayers(state, players) {},
+  SOCKET_updateGame(state, game) {
+    state.game = game
+  },
   CLEAR_DATA(state) {
     state.player.deck = []
     state.player.isPlaying = false
@@ -30,10 +32,10 @@ export const actions = {
   },
   createPlay({ dispatch, state }, play) {},
   joinRoom({ dispatch, state }) {
-    const { player } = state
+    const { player, game } = state
     dispatch('socketEmit', {
       action: 'joinRoom',
-      payload: player
+      payload: { player, idGame: game.id }
     })
   },
   leftRoom({ commit, dispatch }) {

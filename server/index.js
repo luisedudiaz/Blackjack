@@ -53,7 +53,7 @@ async function start() {
       const game = await Game.findById(idGame)
       game.players.push(player)
       game.save()
-      io.to(game._id).emit('updateUsers', game)
+      io.to(game._id).emit('updateGame', game)
       socket.broadcast
         .to(idGame)
         .emit('newMessage', `${player.name} is connected`)
