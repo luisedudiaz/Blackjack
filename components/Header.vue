@@ -143,7 +143,7 @@ export default {
               'Ocurrió un error al crear la sala'
             )
           } else {
-            this.setGame({ id: data.response.id })
+            this.setGame({ id: data.response.id, house: data.response.house })
             this.makeToast('success', 'Éxito', 'El juego se creó correctamente')
           }
         })

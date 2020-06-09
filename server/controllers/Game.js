@@ -53,7 +53,8 @@ gameController.createGame = async (req, res) => {
         status: 200,
         message: 'Game created successfully',
         response: {
-          id: data._id
+          id: data._id,
+          house: data.players[0]
         }
       })
     })
