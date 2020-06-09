@@ -7,7 +7,7 @@
           class="mb-2"
           variant="success"
           block
-          @click="joinRoom('5edee5fadc9b892c59e2056c')"
+          @click="joinRoom('5edef46da187eb3170a3e549')"
         >
           Ir a Sala
         </b-button>

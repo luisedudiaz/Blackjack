@@ -70,29 +70,29 @@ export const actions = {
       .$post('/games/', body)
       .then((data) => {
         if (data.status !== 200) {
-          this.$bvToast.toast('Ocurrió un error al crear la sala', {
+          /* this.$bvToast.toast('Ocurrió un error al crear la sala', {
             title: 'Error',
             variant: 'danger',
             autoHideDelay: 3000,
             appendToast: true
-          })
+          }) */
         } else {
           commit('SET_GAME', { id: data.response.id })
-          this.$bvToast.toast('El juego se creó correctamente', {
+          /* this.$bvToast.toast('El juego se creó correctamente', {
             title: 'Éxito',
             variant: 'success',
             autoHideDelay: 3000,
             appendToast: true
-          })
+          }) */
         }
       })
-      .catch((err) => {
-        this.$bvToast.toast(err, {
+      .catch(() => {
+        /* this.$bvToast.toast(err, {
           title: 'Error',
           variant: 'danger',
           autoHideDelay: 3000,
           appendToast: true
-        })
+        }) */
       })
   },
   SOCKET_reconnect({ state, dispatch }) {
