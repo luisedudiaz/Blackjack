@@ -46,7 +46,7 @@
             <b-icon variant="light" icon="forward"></b-icon>
             Salas
           </b-button>
-          <b-button size="sm" class="mb-2" lock @click="createGame">
+          <b-button size="sm" class="mb-2" lock @click="createConnection">
             <b-icon variant="light" icon="pencil-square"></b-icon>
             Crear Sala
           </b-button>
@@ -100,7 +100,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions({ setPlayer: 'setPlayer', setGame: 'setGame' }),
+    ...mapActions({
+      setPlayer: 'setPlayer',
+      setGame: 'setGame',
+      createConnection: 'createConnection'
+    }),
     signIn(name) {
       const body = { name }
       this.$axios

@@ -14,6 +14,7 @@ export const mutations = {
   },
   SOCKET_newPlay(state, play) {},
   SOCKET_updateGame(state, game) {
+    console.log('UPDATE_GAME')
     state.game = game
   },
   CLEAR_DATA(state) {
@@ -37,12 +38,13 @@ export const actions = {
     return this._vm.$socket.emit(action, payload)
   },
   createPlay({ dispatch, state }, play) {},
-  joinRoom({ dispatch, state }) {
-    const { player, game } = state
-    dispatch('socketEmit', {
+  async joinRoom({ dispatch, state }, idGame) {
+    const { player } = state
+    const { id } = await dispatch('socketEmit', {
       action: 'joinRoom',
-      payload: { player, idGame: game.id }
+      payload: { player: player[0], idGame }
     })
+    console.log(id)
   },
   leftRoom({ commit, dispatch }) {
     dispatch('socketEmit', {
@@ -59,12 +61,39 @@ export const actions = {
       payload: player
     })
   },
-  async createUser({ commit, dispatch }, user) {
+  async createConnection({ commit, state, dispatch }) {
     const { id } = await dispatch('socketEmit', {
-      action: 'createUser',
-      payload: user
+      action: 'createConnection'
     })
-    commit('setUser', { id, ...user })
+    const body = { player: state.player[0], socket: id }
+    this.$axios
+      .$post('/games/', body)
+      .then((data) => {
+        if (data.status !== 200) {
+          this.$bvToast.toast('Ocurrió un error al crear la sala', {
+            title: 'Error',
+            variant: 'danger',
+            autoHideDelay: 3000,
+            appendToast: true
+          })
+        } else {
+          commit('SET_GAME', { id: data.response.id })
+          this.$bvToast.toast('El juego se creó correctamente', {
+            title: 'Éxito',
+            variant: 'success',
+            autoHideDelay: 3000,
+            appendToast: true
+          })
+        }
+      })
+      .catch((err) => {
+        this.$bvToast.toast(err, {
+          title: 'Error',
+          variant: 'danger',
+          autoHideDelay: 3000,
+          appendToast: true
+        })
+      })
   },
   SOCKET_reconnect({ state, dispatch }) {
     const { user } = state

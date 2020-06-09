@@ -48,12 +48,14 @@ async function start() {
   const Game = mongoose.model('game')
   io.on('connection', (socket) => {
     const exitEvents = ['leftRoom', 'disconnect']
-    socket.on('createUser', (user) => {})
-    socket.on('joinRoom', async ({ player, idGame }) => {
+    socket.on('createConnection', () => {
+      return socket.io
+    })
+    socket.on('joinRoom', async ({ player, idGame, room }) => {
       const game = await Game.findById(idGame)
       game.players.push(player)
       game.save()
-      io.to(game._id).emit('updateGame', game)
+      io.in(room).emit('updateGame', game)
       socket.broadcast
         .to(idGame)
         .emit('newMessage', `${player.name} is connected`)

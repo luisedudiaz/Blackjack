@@ -2,6 +2,15 @@
   <div>
     <div class="background">
       <div class="container">
+        <b-button
+          size="sm"
+          class="mb-2"
+          variant="success"
+          block
+          @click="joinRoom('5edee5fadc9b892c59e2056c')"
+        >
+          Ir a Sala
+        </b-button>
         <div>
           <h1 class="title">
             Salas
@@ -27,6 +36,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -44,6 +54,9 @@ export default {
         { isActive: true, participants: 2, id: 147, access: 'Ir a sala' }
       ]
     }
+  },
+  methods: {
+    ...mapActions({ joinRoom: 'joinRoom' })
   }
 }
 </script>
