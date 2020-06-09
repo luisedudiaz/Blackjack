@@ -9,8 +9,7 @@ const gameSchema = new Schema({
   winner: { type: String },
   players: [playerSchema],
   turn: playerSchema,
-  status: { type: Boolean },
-  socket: { type: String }
+  status: { type: Boolean }
 })
 
 mongoose.model('game', gameSchema)

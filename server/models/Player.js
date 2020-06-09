@@ -10,7 +10,8 @@ const playerSchema = new Schema({
   deck: [cardSchema],
   isPlaying: {
     type: Boolean
-  }
+  },
+  socket: String
 })
 
 mongoose.model('player', playerSchema)

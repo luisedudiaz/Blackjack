@@ -7,7 +7,7 @@
           class="mb-2"
           variant="success"
           block
-          to="salas/5edefc6ce8846136a8222364"
+          to="/salas/5edefc6ce8846136a8222364"
         >
           Ir a Sala
         </b-button>

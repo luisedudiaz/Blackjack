@@ -78,14 +78,17 @@ async function start() {
     })
 
     socket.on('joinRoom', async ({ player, idGame }) => {
-      socket.join(idGame)
-      const game = await Game.findOne({ _id: idGame })
-      console.log(game)
-      game.players.push(player)
-      await game.save()
-      io.to(idGame).emit('updateGame', game)
-      socket.emit('newMessage', 'EMIT')
-      socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
+      if (player && idGame) {
+        socket.join(idGame)
+        const game = await Game.findOne({ _id: idGame })
+        game.players.push(player)
+        await game.save()
+        io.to(idGame).emit('updateGame', game)
+        socket.emit('newMessage', 'EMIT')
+        socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
+      } else {
+        socket.emit('redirect')
+      }
     })
 
     socket.on('createMessage', ({ id, msg }) => {

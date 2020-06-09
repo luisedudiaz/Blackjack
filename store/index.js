@@ -112,8 +112,7 @@ export const actions = {
 
 export const state = () => ({
   player: {},
-  messages: '',
-  users: [],
+  messages: [],
   game: {}
 })
 
@@ -140,10 +139,13 @@ export const mutations = {
     console.log('updateGame')
     state.game = game
   },
-  clearData(state) {
-    state.user = {}
+  SOCKET_redirect() {
+    this.$router.push('/salas')
+  },
+  CLEAR(state) {
+    state.player = {}
     state.messages = []
-    state.users = []
+    state.game = {}
   },
   setTypingStatus(state, status) {
     state.user.typingStatus = status
@@ -151,14 +153,14 @@ export const mutations = {
 }
 
 export const actions = {
-  setPlayer({ commit }, player) {
-    commit('SET_PLAYER', player)
+  socketEmit(_, { action, payload }) {
+    return this._vm.$socket.emit(action, payload)
   },
   setGame({ commit }, game) {
     commit('SET_GAME', game)
   },
-  socketEmit(_, { action, payload }) {
-    return this._vm.$socket.emit(action, payload)
+  clear({ commit }) {
+    commit('CLEAR')
   },
   createMessage({ dispatch, state }, msg) {
     const { user } = state
@@ -195,6 +197,26 @@ export const actions = {
       action: 'setTypingStatus',
       payload: user
     })
+  },
+  async setPlayer({ commit, state, dispatch }, name) {
+    const { id } = await dispatch('socketEmit', {
+      action: 'createConnection'
+    })
+    const body = { name, socket: id }
+    this.$axios
+      .$post('/players/', body)
+      .then((data) => {
+        console.log(data)
+        commit('SET_PLAYER', data.player)
+        // this.makeToast('success', 'Éxito', 'El inicio de sesión fue exitoso')
+      })
+      .catch(() => {
+        /* this.makeToast(
+          'danger',
+          'Error',
+          'Ocurrió un error al iniciar sesión'
+        ) */
+      })
   },
   async createUser({ commit, dispatch }, user) {
     const { id } = await dispatch('socketEmit', {

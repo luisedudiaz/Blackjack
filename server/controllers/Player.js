@@ -71,28 +71,32 @@ playerController.getHousePlayer = (req, res) => {
 playerController.login = async (req, res) => {
   try {
     const user = req.body.name
+    const socket = req.body.socket
     const exists = await Player.exists({ name: user })
 
     if (exists) {
-      const data = await Player.find({ name: user })
+      const player = await Player.findOne({ name: user })
+      player.socket = socket
+      await player.save()
       return res.json({
         success: true,
         status: 200,
-        player: data
+        player
       })
     } else {
       const id = new mongoose.Types.ObjectId()
-      const player = new Player({
+      const doc = new Player({
         _id: id,
         name: user,
         deck: [],
-        isPlaying: false
+        isPlaying: false,
+        socket
       })
-      const data = await player.save()
+      const player = await doc.save()
       return res.json({
         success: true,
         status: 200,
-        player: data
+        player
       })
     }
   } catch (e) {

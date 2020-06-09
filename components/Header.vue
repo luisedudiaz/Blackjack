@@ -106,20 +106,7 @@ export default {
       createConnection: 'createConnection'
     }),
     signIn(name) {
-      const body = { name }
-      this.$axios
-        .$post('/players/', body)
-        .then((data) => {
-          this.setPlayer(data.player)
-          this.makeToast('success', 'Éxito', 'El inicio de sesión fue exitoso')
-        })
-        .catch(() => {
-          this.makeToast(
-            'danger',
-            'Error',
-            'Ocurrió un error al iniciar sesión'
-          )
-        })
+      this.setPlayer(name)
     },
     makeToast(varian, titl, msg) {
       this.$bvToast.toast(msg, {

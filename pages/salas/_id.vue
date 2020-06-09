@@ -17,7 +17,7 @@ export default {
   methods: {
     ...mapActions(['joinRoom'])
   },
-  created() {
+  mounted() {
     this.joinRoom('5edefc6ce8846136a8222364')
   }
 }
