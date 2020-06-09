@@ -112,7 +112,7 @@ export const actions = {
 
 export const state = () => ({
   player: {},
-  messages: [],
+  messages: '',
   users: [],
   game: {}
 })
@@ -134,9 +134,10 @@ export const mutations = {
     state.user = user
   },
   SOCKET_newMessage(state, msg) {
-    state.messages = [...state.messages, msg]
+    state.messages = msg
   },
-  SOCKET_updateUsers(state, game) {
+  SOCKET_updateGame(state, game) {
+    console.log('updateGame')
     state.game = game
   },
   clearData(state) {

@@ -83,14 +83,9 @@ async function start() {
       console.log(game)
       game.players.push(player)
       await game.save()
-      io.in(idGame).emit('updateGame', game)
-      // socket.emit('newMessage', new Message('admin', `Hello, ${name}`))
-      /* socket.broadcast
-        .to(room)
-        .emit(
-          'newMessage',
-          new Message('admin', `User ${name} connected to chat`)
-        ) */
+      io.to(idGame).emit('updateGame', game)
+      socket.emit('newMessage', 'EMIT')
+      socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
     })
 
     socket.on('createMessage', ({ id, msg }) => {
