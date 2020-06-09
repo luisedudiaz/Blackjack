@@ -70,11 +70,15 @@ gameController.createGame = async (req, res) => {
 gameController.getGames = (req, res) => {
   Game.find()
     .then((data) => {
+      const games = []
+      data.forEach((item) => {
+        games.push({ id: item._id, players: item.players.length - 1 })
+      })
       return res.json({
         success: true,
         status: 200,
-        games: data,
-        empty: data.length === 0
+        games,
+        empty: games.length === 0
       })
     })
     .catch(() => {

@@ -6,7 +6,7 @@ const playerSchema = mongoose.model('player').schema
 const gameSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   deck: [cardSchema],
-  winner: playerSchema,
+  winner: { type: String },
   players: [playerSchema],
   turn: playerSchema,
   status: { type: Boolean }

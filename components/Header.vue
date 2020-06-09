@@ -46,7 +46,7 @@
             <b-icon variant="light" icon="forward"></b-icon>
             Salas
           </b-button>
-          <b-button size="sm" class="mb-2" lock to="/nuevo">
+          <b-button size="sm" class="mb-2" lock @click="createGame">
             <b-icon variant="light" icon="pencil-square"></b-icon>
             Crear Sala
           </b-button>
@@ -100,13 +100,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions({ setPlayer: 'setPlayer' }),
+    ...mapActions({ setPlayer: 'setPlayer', setGame: 'setGame' }),
     signIn(name) {
       const body = { name }
       this.$axios
         .$post('/players/', body)
         .then((data) => {
-          console.log(data)
           this.setPlayer(data.player)
           this.makeToast('success', 'Éxito', 'El inicio de sesión fue exitoso')
         })
@@ -131,6 +130,26 @@ export default {
       this.isLogged = false
       this.makeToast('success', 'Éxito', 'Se cerró la sesión correctamente')
       this.$auth.logout()
+    },
+    createGame() {
+      const body = { player: this.$store.state.player[0] }
+      this.$axios
+        .$post('/games/', body)
+        .then((data) => {
+          if (data.status !== 200) {
+            this.makeToast(
+              'danger',
+              'Error',
+              'Ocurrió un error al crear la sala'
+            )
+          } else {
+            this.setGame({ id: data.response.id })
+            this.makeToast('success', 'Éxito', 'El juego se creó correctamente')
+          }
+        })
+        .catch((err) => {
+          this.makeToast('danger', 'Error', err)
+        })
     }
   }
 }
