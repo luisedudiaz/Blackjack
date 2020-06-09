@@ -1,72 +1,72 @@
 <template>
-  <div>
-    <div class="background">
-      <div class="container">
-        <b-button
-          size="sm"
-          class="mb-2"
-          variant="success"
-          block
-          to="/salas/5edefc6ce8846136a8222364"
+  <b-container fluid class="background">
+    <b-row>
+      <b-col>
+        <h1 class="title text-center">
+          Salas
+        </h1>
+      </b-col>
+    </b-row>
+    <b-row align-h="center">
+      <b-col md="8">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="$store.state.rooms.length"
+          :per-page="perPage"
+          aria-controls="rooms-table"
+        ></b-pagination>
+        <b-table
+          id="rooms-table"
+          dark
+          striped
+          hover
+          responsive
+          show-empty
+          empty-text="No hay salas disponibles."
+          :items="$store.state.rooms"
+          :per-page="perPage"
+          :current-page="currentPage"
+          :fields="fields"
         >
-          Ir a Sala
-        </b-button>
-        <div>
-          <h1 class="title">
-            Salas
-          </h1>
-          <b-table striped hover :items="items" :fields="fields">
-            <template v-slot:cell(id)="data">
-              <h2>
-                {{ data.item.id + data.item.participants }}
-              </h2>
-            </template>
-            <template v-slot:cell(access)="data">
-              <NuxtLink :to="`/salas/${data.item.id}`">
-                <b-button size="sm" class="mb-2" variant="success" block>
-                  Ir a Sala
-                </b-button>
-              </NuxtLink>
-            </template>
-          </b-table>
-        </div>
-      </div>
-    </div>
-  </div>
+          <template v-slot:cell(id)="data">
+            {{ 'Room-' + data.item.id }}
+          </template>
+          <template v-slot:cell(access)="data">
+            <NuxtLink :to="`/salas/${data.item.id}`">
+              <b-button size="sm" class="mb-2" variant="success" block>
+                Ir a Sala
+              </b-button>
+            </NuxtLink>
+          </template>
+        </b-table>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
       // Note `isActive` is left out and will not appear in the rendered table
-      fields: ['id', 'participants', 'access'],
-      items: [
-        {
-          isActive: true,
-          id: 123,
-          participants: 4,
-          access: 'Ir a sala'
-        },
-        { isActive: false, participants: 7, id: 456, access: 'Ir a sala' },
-        { isActive: false, participants: 7, id: 789, access: 'Ir a sala' },
-        { isActive: true, participants: 2, id: 147, access: 'Ir a sala' }
-      ]
+      perPage: 10,
+      currentPage: 1,
+      fields: ['id', 'players', 'access']
     }
+  },
+  mounted() {
+    this.setRooms()
+  },
+  methods: {
+    ...mapActions(['setRooms'])
   }
 }
 </script>
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
 .background {
   /* Location of the image */
+  min-height: 100vh;
   background-image: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.3) 0%,

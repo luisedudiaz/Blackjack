@@ -14,11 +14,11 @@
 import { mapActions } from 'vuex'
 export default {
   name: 'IdVue',
-  methods: {
-    ...mapActions(['joinRoom'])
-  },
   mounted() {
     this.joinRoom(this.$route.params.id)
+  },
+  methods: {
+    ...mapActions(['joinRoom'])
   }
 }
 </script>

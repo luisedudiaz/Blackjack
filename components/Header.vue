@@ -1,5 +1,5 @@
 <template>
-  <div class="position-absolute m-3">
+  <div id="sidebar_button" class="position-absolute m-3">
     <b-button v-b-toggle.sidebar class="bj-red" size="lg" variant="danger">
       <b-icon variant="light" scale="1.5" icon="gem"></b-icon>
     </b-button>
@@ -35,18 +35,22 @@
         </div>
       </template>
       <div v-if="isLogged">
-        <div class="text-secondary text-center px-3 py-4">
+        <div class="text-light text-center px-3 py-4">
           <h3>Blackjack</h3>
         </div>
         <b-button-group
           class="d-flex text-light align-items-center px-3 py-2"
           vertical
         >
-          <b-button size="sm" class="mb-2" block to="/salas">
+          <b-button block to="/">
+            <b-icon variant="light" icon="forward"></b-icon>
+            Inicio
+          </b-button>
+          <b-button block to="/salas">
             <b-icon variant="light" icon="forward"></b-icon>
             Salas
           </b-button>
-          <b-button size="sm" class="mb-2" lock @click="createGame">
+          <b-button class="mb-2" lock @click="createGame">
             <b-icon variant="light" icon="pencil-square"></b-icon>
             Crear Sala
           </b-button>
@@ -159,6 +163,10 @@ export default {
 
 #sidebar .b-sidebar-header button {
   color: #b30606;
+}
+
+#sidebar_button {
+  z-index: 10;
 }
 
 #sidebar #sidebar___title__ {

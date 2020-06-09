@@ -46,56 +46,29 @@ async function start() {
 
   require('./models/Game')
   const Game = mongoose.model('game')
-  /* io.on('connection', (socket) => {
-    const exitEvents = ['leftRoom', 'disconnect']
-    socket.on('createConnection', () => {
-      return socket.io
-    })
-    socket.on('joinRoom', async ({ idGame, player }) => {
-      const game = await Game.findOne({ _id: idGame })
-      console.log(game)
-      game.players.push(player)
-      game.save()
-      io.in(game.socket).emit('updateGame', game)
-      socket.broadcast
-        .to(idGame)
-        .emit('newMessage', `${player.name} is connected`)
-    })
-    socket.on('play', ({ user, game }) => {})
-    socket.on('setThinkingStatus', ({ room, status, user }) => {})
-    exitEvents.forEach((event) => {
-      socket.on(event, () => {})
-    })
-  }) */
   io.on('connection', (socket) => {
-    socket.on('createUser', (user) => {
-      /* usersDB.addUser({
-        ...user,
-        id: socket.id
-      })
-
-      return { id: socket.id } */
-    })
-
     socket.on('joinRoom', async ({ player, idGame }) => {
       if (player && idGame) {
         socket.join(idGame)
-        const game = await Game.findOne({ _id: idGame })
-        game.players.push(player)
-        await game.save()
-        io.to(idGame).emit('updateGame', game)
-        socket.emit('newMessage', 'EMIT')
-        socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
+        try {
+          const game = await Game.findOne({ _id: idGame })
+          if (game) {
+            const games = await Game.find({})
+            game.players.push(player)
+            await game.save()
+            io.to(idGame).emit('updateGame', game)
+            socket.emit('updateTable', games)
+            socket.emit('newMessage', 'EMIT')
+            socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
+          } else {
+            socket.emit('redirect')
+          }
+        } catch (e) {
+          socket.emit('redirect')
+        }
       } else {
         socket.emit('redirect')
       }
-    })
-
-    socket.on('createMessage', ({ id, msg }) => {
-      /* const user = usersDB.getUser(id)
-      if (user) {
-        io.to(user.room).emit('newMessage', new Message(user.name, msg, id))
-      } */
     })
 
     socket.on('setTypingStatus', ({ room, typingStatus, id }) => {
@@ -131,7 +104,10 @@ async function start() {
       })
     })
   } catch (e) {
-    console.log(e)
+    consola.error({
+      message: `e: ${e}`,
+      badge: true
+    })
   }
 }
 start()
