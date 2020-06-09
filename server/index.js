@@ -6,6 +6,7 @@ const config = require('../nuxt.config.js')
 const app = require('express')()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
+const mongoose = require('mongoose')
 
 // Import and Set Nuxt.js options
 const { dev, mongo } = require('./config/index')
@@ -43,10 +44,20 @@ async function start() {
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
+  require('./models/Game')
+  const Game = mongoose.model('game')
   io.on('connection', (socket) => {
     const exitEvents = ['leftRoom', 'disconnect']
     socket.on('createUser', (user) => {})
-    socket.on('joinRoom', ({ user, room }) => {})
+    socket.on('joinRoom', async ({ player, idGame }) => {
+      const game = await Game.findById(idGame)
+      game.players.push(player)
+      game.save()
+      io.to(game._id).emit('updateUsers', game)
+      socket.broadcast
+        .to(idGame)
+        .emit('newMessage', `${player.name} is connected`)
+    })
     socket.on('play', ({ user, game }) => {})
     socket.on('setThinkingStatus', ({ room, status, user }) => {})
     exitEvents.forEach((event) => {

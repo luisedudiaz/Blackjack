@@ -1,6 +1,5 @@
 export const state = () => ({
   player: {},
-  players: {},
   game: {}
 })
 
@@ -15,12 +14,12 @@ export const mutations = {
   },
   SOCKET_newPlay(state, play) {},
   SOCKET_updatePlayers(state, players) {},
-  clearData(state) {
-    state.player = {}
-    state.players = {}
+  CLEAR_DATA(state) {
+    state.player.deck = []
+    state.player.isPlaying = false
     state.game = {}
   },
-  setThinkingStatus(state, status) {
+  SET_PLAYER_STATUS(state, status) {
     state.user.isPlaying = status
   }
 }
@@ -37,10 +36,10 @@ export const actions = {
   },
   createPlay({ dispatch, state }, play) {},
   joinRoom({ dispatch, state }) {
-    const { user } = state
+    const { player } = state
     dispatch('socketEmit', {
       action: 'joinRoom',
-      payload: user
+      payload: player
     })
   },
   leftRoom({ commit, dispatch }) {
@@ -48,14 +47,14 @@ export const actions = {
       action: 'leftChat',
       payload: null
     })
-    commit('clearData')
+    commit('CLEAR_DATA')
   },
-  setThinkingStatus({ dispatch, commit, state }, typingStatus) {
-    commit('setThinkingStatus', typingStatus)
-    const { user } = state
+  setPlayerStatus({ dispatch, commit, state }, typingStatus) {
+    commit('SET_PLAYER_STATUS', typingStatus)
+    const { player } = state
     dispatch('socketEmit', {
-      action: 'setThinkingStatus',
-      payload: user
+      action: 'SET_PLAYER_STATUS',
+      payload: player
     })
   },
   async createUser({ commit, dispatch }, user) {
