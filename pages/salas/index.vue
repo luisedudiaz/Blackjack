@@ -7,7 +7,7 @@
           class="mb-2"
           variant="success"
           block
-          @click="joinRoom('5edef46da187eb3170a3e549')"
+          to="salas/5edefc6ce8846136a8222364"
         >
           Ir a Sala
         </b-button>
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -54,9 +53,6 @@ export default {
         { isActive: true, participants: 2, id: 147, access: 'Ir a sala' }
       ]
     }
-  },
-  methods: {
-    ...mapActions({ joinRoom: 'joinRoom' })
   }
 }
 </script>
