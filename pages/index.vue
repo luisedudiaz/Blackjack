@@ -6,11 +6,18 @@
           <h1 class="title">
             Blackjack
           </h1>
+          <div v-if="isLogged">
+            <b-form-input
+              v-model="text"
+              placeholder="Ingresa ID de sala"
+            ></b-form-input>
+          </div>
         </b-col>
       </b-row>
     </b-container>
   </div>
 </template>
+
 <style>
 .container {
   margin: 0 auto;
