@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -55,9 +55,6 @@ export default {
       currentPage: 1,
       fields: ['id', 'players', 'access']
     }
-  },
-  computed: {
-    ...mapGetters(['rooms'])
   },
   mounted() {
     this.setRooms()

@@ -59,7 +59,7 @@ async function start() {
             game.players.push(player)
             await game.save()
             io.to(idGame).emit('updateGame', game)
-            io.to(idGame).emit('updateTable', games)
+            socket.broadcast.emit('updateTable', games)
             socket.emit('newMessage', 'EMIT')
             socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
           } else {
