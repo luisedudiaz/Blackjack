@@ -45,7 +45,9 @@ async function start() {
   app.use(nuxt.render)
 
   require('./models/Game')
+  require('./models/Player')
   const Game = mongoose.model('game')
+  const Player = mongoose.model('player')
   io.on('connection', (socket) => {
     socket.on('joinRoom', async ({ player, idGame }) => {
       if (player && idGame) {
@@ -76,23 +78,41 @@ async function start() {
       io.to(room).emit('updateUsers', usersDB.getUsersByRoom(room)) */
     })
 
-    /* const exitEvents = ['leftChat', 'disconnect']
+    const exitEvents = ['leftRoom', 'disconnect']
 
     exitEvents.forEach((event) => {
-      socket.on(event, () => {
+      socket.on(event, async () => {
         const id = socket.id
-        const user = usersDB.getUser(id)
-        if (!user) return
-        const { room, name } = user
-        usersDB.removeUser(id)
-        socket.leave(room)
-        io.to(room).emit('updateUsers', usersDB.getUsersByRoom(room))
-        io.to(room).emit(
-          'newMessage',
-          new Message('admin', `User ${name} left chat`)
-        )
+        try {
+          const user = await Player.findOne({ socket: id })
+          if (user) {
+            try {
+              const game = await Game.findOne({ 'players._id': user._id })
+              if (game.players) {
+                game.players.pull({ _id: user._id })
+                try {
+                  const games = await Game.find({})
+                  socket.leave(game._id)
+                  io.to(game._id).emit('updateGame', game)
+                  socket.emit('updateTable', games)
+                } catch (e) {
+                  console.log(e)
+                }
+                await game.save()
+              } else {
+                socket.emit('redirect')
+              }
+            } catch (e) {
+              console.log(e)
+            }
+          } else {
+            socket.emit('redirect')
+          }
+        } catch (e) {
+          console.log(e)
+        }
       })
-    }) */
+    })
   })
 
   // Listen the server

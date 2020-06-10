@@ -62,6 +62,7 @@
         :fields="['name', 'deck']"
       ></b-table>
     </div>
+    <b-button to="/salas">LEFT ROOM</b-button>
   </div>
 </template>
 
@@ -80,8 +81,11 @@ export default {
   mounted() {
     this.joinRoom(this.$route.params.id)
   },
+  destroyed() {
+    this.leftRoom()
+  },
   methods: {
-    ...mapActions(['joinRoom'])
+    ...mapActions(['joinRoom', 'leftRoom'])
   }
 }
 </script>

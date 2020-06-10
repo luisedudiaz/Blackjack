@@ -29,8 +29,8 @@ export const mutations = {
     state.rooms = rooms
   },
   CLEAR(state) {
-    state.player = {}
-    state.messages = []
+    state.player.deck = []
+    state.player.isPlaying = false
     state.game = {}
   },
   SOCKET_newMessage(state, msg) {
@@ -105,11 +105,9 @@ export const actions = {
   },
   leftRoom({ commit, dispatch }) {
     dispatch('socketEmit', {
-      action: 'leftChat',
-      payload: null
+      action: 'leftRoom'
     })
-
-    commit('clearData')
+    commit('CLEAR')
   },
   setTypingStatus({ dispatch, commit, state }, typingStatus) {
     commit('setTypingStatus', typingStatus)
