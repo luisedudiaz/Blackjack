@@ -6,11 +6,34 @@
           <h1 class="title">
             Blackjack
           </h1>
+          <div v-if="$auth.loggedIn">
+            <b-form-input
+              size="md"
+              placeholder="Ingresa ID de sala"
+              @keyup.enter="goToRoom"
+            ></b-form-input>
+          </div>
         </b-col>
       </b-row>
     </b-container>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    goToRoom(e) {
+      e.preventDefault()
+      const room = e.target.value
+      if (room !== '') {
+        this.$router.push(`/salas/${room}`)
+      }
+      console.log(room)
+    }
+  }
+}
+</script>
+
 <style>
 .container {
   margin: 0 auto;
