@@ -92,9 +92,10 @@ async function start() {
                 game.players.pull({ _id: user._id })
                 try {
                   const games = await Game.find({})
-                  socket.leave(game._id)
                   io.to(game._id).emit('updateGame', game)
                   socket.emit('updateTable', games)
+                  socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
+                  socket.leave(game._id)
                 } catch (e) {
                   console.log(e)
                 }
