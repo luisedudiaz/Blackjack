@@ -6,10 +6,11 @@
           <h1 class="title">
             Blackjack
           </h1>
-          <div v-if="isLogged">
+          <div v-if="$auth.loggedIn">
             <b-form-input
-              v-model="text"
+              size="md"
               placeholder="Ingresa ID de sala"
+              @keyup.enter="goToRoom"
             ></b-form-input>
           </div>
         </b-col>
@@ -17,6 +18,21 @@
     </b-container>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    goToRoom(e) {
+      e.preventDefault()
+      const room = e.target.value
+      if (room !== '') {
+        this.$router.push(`/salas/${room}`)
+      }
+      console.log(room)
+    }
+  }
+}
+</script>
 
 <style>
 .container {
