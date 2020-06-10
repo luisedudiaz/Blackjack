@@ -6,9 +6,16 @@ export const state = () => ({
 })
 
 export const getters = {
-  typingUsers: ({ users, user }) =>
-    users.filter(({ typingStatus, id }) => typingStatus && user.id !== id),
-  typingStatus: ({ user }) => user.typingStatus
+  // typingUsers: ({ users, user }) =>
+  //   users.filter(({ typingStatus, id }) => typingStatus && user.id !== id),
+  // typingStatus: ({ user }) => user.typingStatus
+  state: (state) => state,
+  allOtherPlayers: (state) => {
+    return state.game.players.filter(
+      (player) => player._id !== state.player._id
+    )
+  },
+  rooms: (state) => state.rooms
 }
 
 export const mutations = {
