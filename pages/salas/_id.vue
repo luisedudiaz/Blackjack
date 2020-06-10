@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="background">
+  <div class="background">
     <b-navbar type="dark" variant="dark" align="center" style="height:80px;">
       <b-container>
         <b-col align-self="start"></b-col>
@@ -11,18 +11,71 @@
         <b-col align-self="end"></b-col>
       </b-container>
     </b-navbar>
-    <b-container class="m-5"> </b-container>
-  </b-container>
+    <div class="d-flex justify-content-center">
+      <b-row>
+        <b-col>
+          <div class="m-5">
+            <b-card style="max-width: 25rem;" class="m-2">
+              <h3 class="text-center">Juego</h3>
+              <hr class="my-4" />
+              <p>Mazo del dealer: {{ state.game.players[0].deck }}</p>
+              <hr class="my-2" />
+              <p>Turno: {{ state.game.turn.name }}</p>
+              <hr class="my-2" />
+              <p>Jugadores: {{ state.game.players.length }}</p>
+              <hr class="my-2" />
+              <div v-if="state.game.winner" class="text-center">
+                <p>Winner: {{ state.game.winner }}</p>
+                <p>El juego terminó</p>
+              </div>
+              <p v-else>El juego continúa en curso</p>
+            </b-card>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="m-5">
+            <b-card style="max-width: 25rem;" class="m-2">
+              <h5 class="text-center">{{ state.player.name }}</h5>
+              <hr class="my-4" />
+              <p>Tu mazo: {{ state.player.deck }}</p>
+              <br />
+              <div v-if="state.game.turn.name == state.player.name">
+                <b-button variant="primary" href="#">Pedir carta</b-button>
+                <b-button variant="success" href="#">Pasar</b-button>
+              </div>
+              <div v-else class="text-center">
+                Espera a tu turno
+              </div>
+            </b-card>
+          </div>
+        </b-col>
+      </b-row>
+    </div>
+    <div class="mx-5">
+      <b-table
+        dark
+        striped
+        hover
+        responsive
+        show-empty
+        :items="allOtherPlayers"
+        :fields="['name', 'deck']"
+      ></b-table>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'IdVue',
   data() {
     return {
       players: []
     }
+  },
+  computed: {
+    ...mapGetters(['state', 'allOtherPlayers'])
   },
   mounted() {
     this.joinRoom(this.$route.params.id)
@@ -33,7 +86,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .background {
   min-height: 100vh;
   background-image: linear-gradient(
