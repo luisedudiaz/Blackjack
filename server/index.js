@@ -96,18 +96,18 @@ async function start() {
                   io.to(game._id).emit('updateGame', game)
                   socket.broadcast.to(game._id).emit('updateTable', games)
                   socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
-                  // socket.leave(game._id)
+                  socket.leave(game._id)
                 } catch (e) {
                   console.log(e)
                 }
               } else {
-                socket.emit('redirect')
+                socket.emit('redirect', '1')
               }
             } catch (e) {
               console.log(e)
             }
           } else {
-            socket.emit('redirect')
+            socket.emit('redirect', '2')
           }
         } catch (e) {
           console.log(e)
