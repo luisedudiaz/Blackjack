@@ -59,7 +59,7 @@ async function start() {
             game.players.push(player)
             await game.save()
             io.to(idGame).emit('updateGame', game)
-            socket.emit('updateTable', games)
+            io.to(idGame).emit('updateTable', games)
             socket.emit('newMessage', 'EMIT')
             socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
           } else {
@@ -90,16 +90,16 @@ async function start() {
               const game = await Game.findOne({ 'players._id': user._id })
               if (game.players) {
                 game.players.pull({ _id: user._id })
+                await game.save()
                 try {
                   const games = await Game.find({})
                   io.to(game._id).emit('updateGame', game)
-                  socket.emit('updateTable', games)
+                  socket.broadcast.to(game._id).emit('updateTable', games)
                   socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
-                  socket.leave(game._id)
+                  // socket.leave(game._id)
                 } catch (e) {
                   console.log(e)
                 }
-                await game.save()
               } else {
                 socket.emit('redirect')
               }
