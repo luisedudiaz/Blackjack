@@ -9,12 +9,6 @@
     </b-row>
     <b-row align-h="center">
       <b-col md="8">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="$store.state.rooms.length"
-          :per-page="perPage"
-          aria-controls="rooms-table"
-        ></b-pagination>
         <b-table
           id="rooms-table"
           dark
@@ -39,6 +33,13 @@
             </NuxtLink>
           </template>
         </b-table>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="$store.state.rooms.length"
+          :per-page="perPage"
+          aria-controls="rooms-table"
+          align="right"
+        ></b-pagination>
       </b-col>
     </b-row>
   </b-container>
@@ -47,14 +48,6 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  data() {
-    return {
-      // Note `isActive` is left out and will not appear in the rendered table
-      perPage: 10,
-      currentPage: 1,
-      fields: ['id', 'players', 'access']
-    }
-  },
   mounted() {
     this.setRooms()
   },

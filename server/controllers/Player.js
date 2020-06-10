@@ -11,7 +11,7 @@ function createHousePromise() {
   const id = new mongoose.Types.ObjectId()
   const housePlayer = new Player({
     _id: id,
-    name: `House-${id}`,
+    name: 'Dealer',
     deck: [],
     isPlaying: true
   })
