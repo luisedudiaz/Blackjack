@@ -48,6 +48,14 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
+  data() {
+    return {
+      // Note `isActive` is left out and will not appear in the rendered table
+      perPage: 10,
+      currentPage: 1,
+      fields: ['id', 'players', 'access']
+    }
+  },
   mounted() {
     this.setRooms()
   },
