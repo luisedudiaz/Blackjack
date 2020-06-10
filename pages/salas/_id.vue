@@ -11,7 +11,9 @@
         <b-col align-self="end"></b-col>
       </b-container>
     </b-navbar>
-    <b-container class="m-5"> </b-container>
+    <b-container class="m-5">
+      <b-button to="/salas">LEFT ROOM</b-button>
+    </b-container>
   </b-container>
 </template>
 
@@ -27,8 +29,11 @@ export default {
   mounted() {
     this.joinRoom(this.$route.params.id)
   },
+  destroyed() {
+    this.leftRoom()
+  },
   methods: {
-    ...mapActions(['joinRoom'])
+    ...mapActions(['joinRoom', 'leftRoom'])
   }
 }
 </script>
