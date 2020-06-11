@@ -1,8 +1,11 @@
 export const state = () => ({
   player: {},
+  players: [],
+  turn: {},
   game: {},
   messages: [],
-  rooms: []
+  rooms: [],
+  winner: ''
 })
 
 export const getters = {
@@ -11,9 +14,7 @@ export const getters = {
   // typingStatus: ({ user }) => user.typingStatus
   state: (state) => state,
   allOtherPlayers: (state) => {
-    return state.game.players.filter(
-      (player) => player._id !== state.player._id
-    )
+    return state.players.filter((player) => player._id !== state.player._id)
   },
   rooms: (state) => state.rooms
 }
@@ -32,6 +33,9 @@ export const mutations = {
     state.player.deck = []
     state.player.isPlaying = false
     state.game = {}
+    state.players = []
+    state.turn = {}
+    state.winner = {}
   },
   SOCKET_newMessage(state, msg) {
     state.messages = msg
@@ -39,6 +43,9 @@ export const mutations = {
   SOCKET_updateGame(state, game) {
     // console.log('updateGame')
     state.game = game
+    state.players = game.players
+    state.turn = game.turn
+    state.winner = game.winner
   },
   SOCKET_updateTable(state, rooms) {
     console.log(rooms)

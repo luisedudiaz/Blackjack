@@ -66,7 +66,7 @@ async function start() {
             games.forEach((game) => {
               rooms.push({
                 id: game._id,
-                players: game.players.length
+                players: game.players.length - 1
               })
             })
             socket.broadcast.emit('updateTable', rooms)
@@ -107,8 +107,15 @@ async function start() {
                 await game.save()
                 try {
                   const games = await Game.find({})
+                  const rooms = []
+                  games.forEach((game) => {
+                    rooms.push({
+                      id: game._id,
+                      players: game.players.length - 1
+                    })
+                  })
                   io.to(game._id).emit('updateGame', game)
-                  socket.broadcast.to(game._id).emit('updateTable', games)
+                  socket.broadcast.to(game._id).emit('updateTable', rooms)
                   socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
                   socket.leave(game._id)
                 } catch (e) {

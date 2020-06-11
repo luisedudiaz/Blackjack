@@ -20,15 +20,15 @@
           <div class="m-5">
             <b-card style="max-width: 25rem;" class="m-2">
               <h3 class="text-center">Juego</h3>
-              <hr class="my-4" />
-              <p>Mazo del dealer: {{ state.game.players }}</p>
+              <!--<hr class="my-4" />-->
+              <!--<p>Mazo del dealer: {{ state.game.players }}</p>-->
               <hr class="my-2" />
-              <p>Turno: {{ state.game.turn.name }}</p>
+              <p>Turno: {{ state.turn.name }}</p>
               <hr class="my-2" />
-              <p>Jugadores: {{ state.game.players.length }}</p>
+              <p>Jugadores: {{ state.players.length }}</p>
               <hr class="my-2" />
-              <div v-if="state.game.winner" class="text-center">
-                <p>Winner: {{ state.game.winner }}</p>
+              <div v-if="state.winner" class="text-center">
+                <p>Winner: {{ state.winner }}</p>
                 <p>El juego terminó</p>
               </div>
               <p v-else>El juego continúa en curso</p>
@@ -42,7 +42,7 @@
               <hr class="my-4" />
               <p>Tu mazo: {{ state.player.deck }}</p>
               <br />
-              <div v-if="state.game.turn.name == state.player.name">
+              <div v-if="state.turn.name === state.player.name">
                 <b-button variant="primary" href="#">Pedir carta</b-button>
                 <b-button variant="success" href="#">Pasar</b-button>
               </div>
@@ -74,7 +74,7 @@ export default {
   name: 'IdVue',
   data() {
     return {
-      players: []
+      c: {}
     }
   },
   computed: {
@@ -86,8 +86,11 @@ export default {
       this.joinRoom(this.$route.params.id)
     })
   },
+  mounted() {
+    this.c = JSON.parse(JSON.stringify(this.$store.state.game))
+  },
   destroyed() {
-    // this.leftRoom()
+    this.leftRoom()
   },
   methods: {
     ...mapActions(['joinRoom', 'leftRoom', 'setGame'])
