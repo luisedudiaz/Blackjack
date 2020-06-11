@@ -1,6 +1,7 @@
 require('../models/Player')
 const mongoose = require('mongoose')
 const Player = mongoose.model('player')
+// const Game = mongoose.model('game')
 
 const playerController = {}
 
@@ -105,6 +106,30 @@ playerController.login = async (req, res) => {
       message: 'Internal server error',
       status: 500,
       response: e
+    })
+  }
+}
+
+/**
+ * Delete user from game
+ */
+playerController.deletePlayerFromGame = (req, res) => {
+  const id = req.params.id
+  if (id) {
+    try {
+      // const game = await Game.findOne({ 'players._id': id })
+    } catch (e) {
+      res.json({
+        success: false,
+        message: 'Internal server error',
+        status: 500,
+        response: e
+      })
+    }
+  } else {
+    res.json({
+      success: false,
+      message: 'Not user provided'
     })
   }
 }
