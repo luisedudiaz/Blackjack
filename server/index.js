@@ -50,12 +50,15 @@ async function start() {
   const Player = mongoose.model('player')
   io.on('connection', (socket) => {
     socket.on('joinRoom', async ({ player, idGame }) => {
+      console.log(idGame)
       if (player && idGame) {
         socket.join(idGame)
         try {
-          const game = await Game.findOne({ _id: idGame })
+          const game = await Game.findById(idGame)
+          console.log(game)
           if (game) {
             const games = await Game.find({})
+            console.log(games)
             game.players.push(player)
             await game.save()
             io.to(idGame).emit('updateGame', game)
@@ -63,19 +66,23 @@ async function start() {
             games.forEach((game) => {
               rooms.push({
                 id: game._id,
-                players: game.player.length
+                players: game.players.length
               })
             })
             socket.broadcast.emit('updateTable', rooms)
             socket.emit('newMessage', 'EMIT')
             socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
           } else {
+            console.log(1)
             socket.emit('redirect')
           }
         } catch (e) {
+          console.log(e)
+          console.log(2)
           socket.emit('redirect')
         }
       } else {
+        console.log(3)
         socket.emit('redirect')
       }
     })

@@ -87,7 +87,7 @@ export default {
     })
   },
   destroyed() {
-    this.leftRoom()
+    // this.leftRoom()
   },
   methods: {
     ...mapActions(['joinRoom', 'leftRoom', 'setGame'])
