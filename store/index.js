@@ -1,5 +1,5 @@
 export const state = () => ({
-  turnNumber: 0,
+  turnNumber: 1,
   player: {},
   players: [],
   turn: {},
