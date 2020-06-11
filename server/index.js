@@ -74,8 +74,8 @@ async function start() {
     })
 
     socket.on('setTypingStatus', ({ room, typingStatus, id }) => {
-      /* usersDB.setTypingStatus(id, typingStatus)
-      io.to(room).emit('updateUsers', usersDB.getUsersByRoom(room)) */
+      // usersDB.setTypingStatus(id, typingStatus)
+      // io.to(room).emit('updateUsers', usersDB.getUsersByRoom(room))
     })
 
     const exitEvents = ['leftRoom', 'disconnect']
