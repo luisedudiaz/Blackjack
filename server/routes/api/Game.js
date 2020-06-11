@@ -9,4 +9,6 @@ router.get('/all', game.getGames)
 
 router.get('', game.getGame)
 
+router.post('/update', game.updateGame)
+
 module.exports = router

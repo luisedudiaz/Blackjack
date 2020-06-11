@@ -107,4 +107,36 @@ gameController.getGame = (req, res) => {
     })
 }
 
+gameController.updateGame = async (req, res) => {
+  const gameId = req.body.gameId
+  const playerId = req.body.playerId
+  const card = req.body.card
+  const deck = req.body.deck
+  try {
+    const game = await Game.findOne({ _id: gameId })
+    const newPlayers = []
+    game.players.forEach((player) => {
+      // eslint-disable-next-line eqeqeq
+      if (player._id == playerId) {
+        player.deck.push(card)
+      }
+      newPlayers.push(player)
+    })
+    const updatedGame = await Game.findOneAndUpdate(
+      { _id: gameId },
+      { players: newPlayers, deck },
+      { new: true }
+    )
+    await updatedGame.save()
+    res.json({
+      game: updatedGame,
+      newPlayers
+    })
+  } catch (err) {
+    res.json({
+      error: err
+    })
+  }
+}
+
 module.exports = gameController

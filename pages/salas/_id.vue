@@ -40,16 +40,27 @@
             <b-card style="max-width: 25rem;" class="m-2">
               <h5 class="text-center">{{ state.player.name }}</h5>
               <hr class="my-4" />
-              <p>Tu mazo: {{ state.player.deck }}</p>
+              <p>Tu mazo: {{ getPlayerDeck() }}</p>
               <br />
-              <div v-if="state.turn.name !== state.player.name">
-                <b-button variant="primary" @click="getCardAndUpdateDealerDeck">
-                  Pedir carta
-                </b-button>
-                <b-button variant="success" href="#">Pasar</b-button>
+              <div v-if="!lost">
+                <div v-if="state.turn.name !== state.player.name">
+                  <b-button
+                    variant="primary"
+                    @click="getCardAndUpdateDealerDeck"
+                  >
+                    Pedir carta
+                  </b-button>
+                  <b-button variant="success" @click="getPlayerDeck">
+                    Pasar
+                  </b-button>
+                </div>
+                <div v-else class="text-center">
+                  Espera a tu turno
+                </div>
               </div>
               <div v-else class="text-center">
-                Espera a tu turno
+                <h5>Terminó el juego</h5>
+                <b-button to="/salas">Salir</b-button>
               </div>
             </b-card>
           </div>
@@ -72,8 +83,29 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'IdVue',
+  data() {
+    return {
+      lost: false,
+      cardsNames: [
+        { name: 'As', value: 1 },
+        { name: '2', value: 2 },
+        { name: '3', value: 3 },
+        { name: '4', value: 4 },
+        { name: '5', value: 5 },
+        { name: '6', value: 6 },
+        { name: '7', value: 7 },
+        { name: '8', value: 8 },
+        { name: '9', value: 9 },
+        { name: '10', value: 10 },
+        { name: 'Joto', value: 10 },
+        { name: 'Qüina', value: 10 },
+        { name: 'Rey', value: 10 }
+      ]
+    }
+  },
   computed: {
     ...mapGetters(['state', 'allOtherPlayers', 'deck'])
   },
@@ -84,21 +116,33 @@ export default {
     })
   },
   destroyed() {
-    console.log(this.$store.state.player._id)
     this.leftRoom(this.$store.state.player._id)
   },
   methods: {
     ...mapActions(['joinRoom', 'leftRoom', 'setGame']),
     getCardAndUpdateDealerDeck() {
-      const deck = { deck: this.$store.state.deck }
-      console.log(`${deck}`)
+      const deck = this.$store.state.deck
+      if (!(deck.length > 0)) {
+        this.lost = true
+        return
+      }
       this.$axios
-        .get('/cards/card', deck)
+        .post('/cards/card', { deck })
         .then((data) => {
-          // eslint-disable-next-line no-unused-vars
-          const carta = data.card
-          // eslint-disable-next-line no-unused-vars
-          const newDeck = data.deck
+          const carta = data.data.response.card
+          const newDeck = data.data.response.deck
+          const gameId = this.$route.params.id
+          const playerId = this.$store.state.player._id
+          const body = {
+            gameId,
+            playerId,
+            card: carta,
+            deck: newDeck
+          }
+          this.$axios.post('/games/update', body).then((res) => {
+            console.log(res.data.game)
+            this.setGame(res.data.game)
+          })
         })
         .catch(() => {
           this.$bvToast.toast('Error al obtener carta', {
@@ -108,6 +152,28 @@ export default {
             appendToast: true
           })
         })
+      this.checkPlayerDeck()
+    },
+    checkPlayerDeck() {
+      const cards = this.$store.state.player.deck
+      if (cards.length > 0) {
+        const values = []
+        cards.forEach((card) => {
+          values.push(this.cardsNames[card.value - 1].value)
+        })
+        const arrSum = (cards) => cards.reduce((a, b) => a + b, 0)
+        if (arrSum > 21) {
+          this.lost = true
+        }
+      }
+    },
+    getPlayerDeck() {
+      const cards = this.$store.state.player.deck
+      if (cards.length > 0) {
+        return Array.from(cards, (item) => this.cardsNames[item.value].name)
+      } else {
+        return 'no tienes cartas aún'
+      }
     }
   }
 }
