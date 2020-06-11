@@ -113,6 +113,7 @@ export const actions = {
       })
   },
   leftRoom({ commit, dispatch }, id) {
+    console.log(id)
     dispatch('socketEmit', {
       action: 'leftRoom',
       payload: id

@@ -94,10 +94,12 @@ async function start() {
     const exitEvents = ['leftRoom', 'disconnect']
 
     exitEvents.forEach((event) => {
-      socket.on(event, async ({ id }) => {
+      socket.on(event, async (id) => {
+        console.log(id)
         try {
           try {
             const game = await Game.findOne({ 'players._id': id })
+            console.log(game)
             if (game.players) {
               game.players.pull({ _id: id })
               await game.save()
