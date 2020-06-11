@@ -68,7 +68,7 @@ module.exports = {
   axios: {
     proxy: true,
     credentials: true,
-    debug: true,
+    debug: false,
     prefix: '/api'
   },
   /*

@@ -47,7 +47,6 @@ async function start() {
   require('./models/Game')
   require('./models/Player')
   const Game = mongoose.model('game')
-  const Player = mongoose.model('player')
   io.on('connection', (socket) => {
     socket.on('joinRoom', async ({ player, idGame }) => {
       console.log(idGame)
@@ -95,40 +94,36 @@ async function start() {
     const exitEvents = ['leftRoom', 'disconnect']
 
     exitEvents.forEach((event) => {
-      socket.on(event, async () => {
-        const id = socket.id
+      socket.on(event, async (id) => {
+        console.log(id)
         try {
-          const user = await Player.findOne({ socket: id })
-          if (user) {
-            try {
-              const game = await Game.findOne({ 'players._id': user._id })
-              if (game.players) {
-                game.players.pull({ _id: user._id })
-                await game.save()
-                try {
-                  const games = await Game.find({})
-                  const rooms = []
-                  games.forEach((game) => {
-                    rooms.push({
-                      id: game._id,
-                      players: game.players.length - 1
-                    })
+          try {
+            const game = await Game.findOne({ 'players._id': id })
+            console.log(game)
+            if (game.players) {
+              game.players.pull({ _id: id })
+              await game.save()
+              try {
+                const games = await Game.find({})
+                const rooms = []
+                games.forEach((game) => {
+                  rooms.push({
+                    id: game._id,
+                    players: game.players.length - 1
                   })
-                  io.to(game._id).emit('updateGame', game)
-                  socket.broadcast.emit('updateTable', rooms)
-                  socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
-                  socket.leave(game._id)
-                } catch (e) {
-                  console.log(e)
-                }
-              } else {
-                socket.emit('redirect', '1')
+                })
+                io.to(game._id).emit('updateGame', game)
+                io.emit('updateTable', rooms)
+                socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
+                socket.leave(game._id)
+              } catch (e) {
+                console.log(e)
               }
-            } catch (e) {
-              console.log(e)
+            } else {
+              socket.emit('redirect', '1')
             }
-          } else {
-            socket.emit('redirect', '2')
+          } catch (e) {
+            console.log(e)
           }
         } catch (e) {
           console.log(e)

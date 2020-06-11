@@ -117,9 +117,11 @@ export const actions = {
         ) */
       })
   },
-  leftRoom({ commit, dispatch }) {
+  leftRoom({ commit, dispatch }, id) {
+    console.log(id)
     dispatch('socketEmit', {
-      action: 'leftRoom'
+      action: 'leftRoom',
+      payload: id
     })
     commit('CLEAR')
   },
