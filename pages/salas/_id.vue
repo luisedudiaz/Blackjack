@@ -18,7 +18,7 @@
             <b-card style="max-width: 25rem;" class="m-2">
               <h3 class="text-center">Juego</h3>
               <hr class="my-4" />
-              <p>Mazo del dealer: {{ state.game.players[0].deck }}</p>
+              <p>Mazo del dealer: {{ state.game.players }}</p>
               <hr class="my-2" />
               <p>Turno: {{ state.game.turn.name }}</p>
               <hr class="my-2" />
