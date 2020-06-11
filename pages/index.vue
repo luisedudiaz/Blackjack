@@ -28,7 +28,6 @@ export default {
       if (room !== '') {
         this.$router.push(`/salas/${room}`)
       }
-      console.log(room)
     }
   }
 }
