@@ -50,7 +50,15 @@
                   >
                     Pedir carta
                   </b-button>
-                  <b-button variant="success" @click="getPlayerDeck">
+                  <b-button
+                    variant="success"
+                    @click="
+                      changeTurn({
+                        id: $store.state.player._id,
+                        game: $route.params.id
+                      })
+                    "
+                  >
                     Pasar
                   </b-button>
                 </div>
@@ -119,7 +127,7 @@ export default {
     this.leftRoom(this.$store.state.player._id)
   },
   methods: {
-    ...mapActions(['joinRoom', 'leftRoom', 'setGame']),
+    ...mapActions(['joinRoom', 'leftRoom', 'setGame', 'changeTurn']),
     getCardAndUpdateDealerDeck() {
       const deck = this.$store.state.deck
       if (!(deck.length > 0)) {

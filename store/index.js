@@ -1,4 +1,5 @@
 export const state = () => ({
+  turnNumber: 0,
   player: {},
   players: [],
   turn: {},
@@ -27,7 +28,6 @@ export const mutations = {
   },
   SET_GAME(state, game) {
     state.game = game
-    console.log(game)
     state.deck = game.deck
   },
   SET_ROOMS(state, rooms) {
@@ -41,19 +41,25 @@ export const mutations = {
     state.turn = {}
     state.winner = {}
     state.deck = []
+    state.turnNumber = 0
   },
   SOCKET_newMessage(state, msg) {
     state.messages = msg
   },
   SOCKET_updateGame(state, game) {
-    // console.log('updateGame')
     state.game = game
     state.players = game.players
     state.turn = game.turn
     state.winner = game.winner
   },
+  SOCKET_updateTurn(state, { newIndex, game, g, turn }) {
+    console.log(newIndex, game)
+    state.turnNumber = newIndex
+    state.game = g
+    state.turn = turn
+    this.$router.push(`/salas/${game}`)
+  },
   SOCKET_updateTable(state, rooms) {
-    console.log(rooms)
     state.rooms = rooms
   },
   SOCKET_redirect() {
@@ -105,7 +111,6 @@ export const actions = {
     this.$axios
       .$get('/games/all')
       .then((data) => {
-        console.log('1', data)
         commit('SET_ROOMS', data.games)
         // this.makeToast('success', 'Éxito', 'El inicio de sesión fue exitoso')
       })
@@ -118,12 +123,22 @@ export const actions = {
       })
   },
   leftRoom({ commit, dispatch }, id) {
-    console.log(id)
     dispatch('socketEmit', {
       action: 'leftRoom',
       payload: id
     })
     commit('CLEAR')
+  },
+  changeTurn({ dispatch, state }, { id, game }) {
+    dispatch('socketEmit', {
+      action: 'changeTurn',
+      payload: {
+        id,
+        game,
+        oldIndex: state.turnNumber,
+        newIndex: state.turnNumber + 1
+      }
+    })
   },
   setTypingStatus({ dispatch, commit, state }, typingStatus) {
     commit('setTypingStatus', typingStatus)
