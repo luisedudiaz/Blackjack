@@ -59,7 +59,14 @@ async function start() {
             game.players.push(player)
             await game.save()
             io.to(idGame).emit('updateGame', game)
-            socket.broadcast.emit('updateTable', games)
+            const rooms = []
+            games.forEach((game) => {
+              rooms.push({
+                id: game._id,
+                players: game.player.length
+              })
+            })
+            socket.broadcast.emit('updateTable', rooms)
             socket.emit('newMessage', 'EMIT')
             socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
           } else {

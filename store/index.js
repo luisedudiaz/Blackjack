@@ -41,6 +41,7 @@ export const mutations = {
     state.game = game
   },
   SOCKET_updateTable(state, rooms) {
+    console.log(rooms)
     state.rooms = rooms
   },
   SOCKET_redirect() {

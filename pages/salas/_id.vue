@@ -80,14 +80,17 @@ export default {
   computed: {
     ...mapGetters(['state', 'allOtherPlayers'])
   },
-  mounted() {
-    this.joinRoom(this.$route.params.id)
+  beforeCreate() {
+    this.$axios.get(`/games?id=${this.$route.params.id}`).then((res) => {
+      this.setGame(res.game)
+      this.joinRoom(this.$route.params.id)
+    })
   },
   destroyed() {
     this.leftRoom()
   },
   methods: {
-    ...mapActions(['joinRoom', 'leftRoom'])
+    ...mapActions(['joinRoom', 'leftRoom', 'setGame'])
   }
 }
 </script>
