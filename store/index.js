@@ -11,12 +11,20 @@ export const state = () => ({
 })
 
 export const getters = {
-  // typingUsers: ({ users, user }) =>
-  //   users.filter(({ typingStatus, id }) => typingStatus && user.id !== id),
-  // typingStatus: ({ user }) => user.typingStatus
   state: (state) => state,
   allOtherPlayers: (state) => {
-    return state.players.filter((player) => player._id !== state.player._id)
+    const players = state.players.filter(
+      (player) => player._id !== state.player._id
+    )
+    const other = []
+    players.forEach((player) => {
+      const i = []
+      player.deck.forEach((card) => {
+        i.push(card.value)
+      })
+      other.push({ jugador: player.name, cartas: i })
+    })
+    return other
   },
   rooms: (state) => state.rooms,
   deck: (state) => state.deck
@@ -25,6 +33,9 @@ export const getters = {
 export const mutations = {
   SET_PLAYER(state, player) {
     state.player = player
+  },
+  SET_DECK(state, card) {
+    state.player.deck.push(card)
   },
   SET_GAME(state, game) {
     state.game = game
@@ -96,6 +107,9 @@ export const actions = {
   },
   setGame({ commit }, game) {
     commit('SET_GAME', game)
+  },
+  setDeck({ commit }, card) {
+    commit('SET_DECK', card)
   },
   clear({ commit }) {
     commit('CLEAR')

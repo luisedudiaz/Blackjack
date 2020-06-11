@@ -115,10 +115,12 @@ gameController.updateGame = async (req, res) => {
   try {
     const game = await Game.findOne({ _id: gameId })
     const newPlayers = []
+    let me
     game.players.forEach((player) => {
       // eslint-disable-next-line eqeqeq
       if (player._id == playerId) {
         player.deck.push(card)
+        me = player
       }
       newPlayers.push(player)
     })
@@ -130,7 +132,8 @@ gameController.updateGame = async (req, res) => {
     await updatedGame.save()
     res.json({
       game: updatedGame,
-      newPlayers
+      player: me,
+      deck
     })
   } catch (err) {
     res.json({

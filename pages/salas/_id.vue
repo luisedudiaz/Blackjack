@@ -11,10 +11,14 @@
         <b-col align-self="end"></b-col>
       </b-container>
     </b-navbar>
-    <b-container class="m-5">
-      <b-button to="/salas">LEFT ROOM</b-button>
-    </b-container>
     <div class="d-flex justify-content-center">
+      <b-row class="m-5">
+        <b-col>
+          <div>
+            <b-button to="/salas">LEFT ROOM</b-button>
+          </div>
+        </b-col>
+      </b-row>
       <b-row>
         <b-col>
           <div class="m-5">
@@ -25,7 +29,7 @@
               <hr class="my-2" />
               <p>Turno: {{ state.turn.name }}</p>
               <hr class="my-2" />
-              <p>Jugadores: {{ state.players.length }}</p>
+              <p>Jugadores: {{ state.players.length - 1 }}</p>
               <hr class="my-2" />
               <div v-if="state.winner" class="text-center">
                 <p>Winner: {{ state.winner }}</p>
@@ -43,7 +47,7 @@
               <p>Tu mazo: {{ getPlayerDeck() }}</p>
               <br />
               <div v-if="!lost">
-                <div v-if="state.turn.name !== state.player.name">
+                <div v-if="state.turn.name === state.player.name">
                   <b-button
                     variant="primary"
                     @click="getCardAndUpdateDealerDeck"
@@ -83,7 +87,7 @@
         responsive
         show-empty
         :items="allOtherPlayers"
-        :fields="['name', 'deck']"
+        :fields="['jugador', 'cartas']"
       ></b-table>
     </div>
   </div>
@@ -127,32 +131,38 @@ export default {
     this.leftRoom(this.$store.state.player._id)
   },
   methods: {
-    ...mapActions(['joinRoom', 'leftRoom', 'setGame', 'changeTurn']),
+    ...mapActions(['joinRoom', 'leftRoom', 'setGame', 'changeTurn', 'setDeck']),
     getCardAndUpdateDealerDeck() {
       const deck = this.$store.state.deck
-      if (!(deck.length > 0)) {
+      if (deck.length === 0) {
         this.lost = true
         return
       }
       this.$axios
-        .post('/cards/card', { deck })
+        .$post('/cards/card', { deck })
         .then((data) => {
-          const carta = data.data.response.card
-          const newDeck = data.data.response.deck
+          const carta = data.response.card
+          const newDeck = data.response.deck
           const gameId = this.$route.params.id
           const playerId = this.$store.state.player._id
+          // eslint-disable-next-line no-unused-vars
           const body = {
             gameId,
             playerId,
             card: carta,
             deck: newDeck
           }
-          this.$axios.post('/games/update', body).then((res) => {
-            console.log(res.data.game)
-            this.setGame(res.data.game)
-          })
+          this.setDeck(carta)
+          this.$axios
+            .post('/games/update', body)
+            .then((res) => {
+              console.log(res)
+              this.setGame(res.data.game)
+            })
+            .catch((e) => console.log(e))
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e)
           this.$bvToast.toast('Error al obtener carta', {
             title: 'Error',
             variant: 'danger',
@@ -165,12 +175,11 @@ export default {
     checkPlayerDeck() {
       const cards = this.$store.state.player.deck
       if (cards.length > 0) {
-        const values = []
+        let count = 0
         cards.forEach((card) => {
-          values.push(this.cardsNames[card.value - 1].value)
+          count += card.value
         })
-        const arrSum = (cards) => cards.reduce((a, b) => a + b, 0)
-        if (arrSum > 21) {
+        if (count > 21) {
           this.lost = true
         }
       }
@@ -178,7 +187,7 @@ export default {
     getPlayerDeck() {
       const cards = this.$store.state.player.deck
       if (cards.length > 0) {
-        return Array.from(cards, (item) => this.cardsNames[item.value].name)
+        return Array.from(cards, (item) => this.cardsNames[item.value - 1].name)
       } else {
         return 'no tienes cartas aún'
       }
