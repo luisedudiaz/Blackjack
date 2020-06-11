@@ -1,23 +1,36 @@
 require('../models/Player')
 const mongoose = require('mongoose')
 const Player = mongoose.model('player')
-// const Game = mongoose.model('game')
+const { randomCardNumber } = require('../utils/index')
+
+require('../models/Card')
+const Card = mongoose.model('card')
 
 const playerController = {}
 
 /*
  * Helper function to create the house player {Returns promise}
  */
-function createHousePromise() {
-  const id = new mongoose.Types.ObjectId()
-  const housePlayer = new Player({
-    _id: id,
-    name: 'Dealer',
-    deck: [],
-    isPlaying: true
-  })
-
-  return housePlayer.save()
+async function createHousePromise() {
+  try {
+    const deck = await Card.find({})
+    const cards = []
+    for (let i = 0; i < 3; i++) {
+      const random = randomCardNumber(deck.length)
+      cards.push(deck[random])
+    }
+    const id = new mongoose.Types.ObjectId()
+    const housePlayer = new Player({
+      _id: id,
+      name: 'Dealer',
+      deck: cards,
+      isPlaying: true
+    })
+    return housePlayer.save()
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e)
+  }
 }
 
 /*
