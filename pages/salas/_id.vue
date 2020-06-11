@@ -82,7 +82,8 @@ export default {
     })
   },
   destroyed() {
-    this.leftRoom()
+    console.log(this.$store.state.player.id)
+    this.leftRoom(this.$store.state.player.id)
   },
   methods: {
     ...mapActions(['joinRoom', 'leftRoom', 'setGame'])
