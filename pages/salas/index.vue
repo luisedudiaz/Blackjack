@@ -46,62 +46,62 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
-  export default {
-    data() {
-      return {
-        // Note `isActive` is left out and will not appear in the rendered table
-        perPage: 10,
-        currentPage: 1,
-        fields: ['id', 'players', 'access']
-      }
-    },
-    mounted() {
-      this.setRooms()
-    },
-    methods: {
-      ...mapActions(['setRooms'])
+import { mapActions } from 'vuex'
+export default {
+  data() {
+    return {
+      // Note `isActive` is left out and will not appear in the rendered table
+      perPage: 10,
+      currentPage: 1,
+      fields: ['id', 'players', 'access']
     }
+  },
+  mounted() {
+    this.setRooms()
+  },
+  methods: {
+    ...mapActions(['setRooms'])
   }
+}
 </script>
 <style>
-  .background {
-    /* Location of the image */
-    min-height: 100vh;
-    background-image: linear-gradient(
+.background {
+  /* Location of the image */
+  min-height: 100vh;
+  background-image: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.3) 0%,
       rgba(0, 0, 0, 0.3) 100%
     ),
     url('~assets/cover.jpg');
-    /* Background image is centered vertically and horizontally at all times */
-    background-position: center center;
+  /* Background image is centered vertically and horizontally at all times */
+  background-position: center center;
 
-    /* Background image doesn't tile */
-    background-repeat: no-repeat;
+  /* Background image doesn't tile */
+  background-repeat: no-repeat;
 
-    /* Background image is fixed in the viewport so that it doesn't move when
+  /* Background image is fixed in the viewport so that it doesn't move when
          the content's height is greater than the image's height */
-    background-attachment: fixed;
+  background-attachment: fixed;
 
-    /* This is what makes the background image rescale based
+  /* This is what makes the background image rescale based
          on the container's size */
-    background-size: cover;
+  background-size: cover;
 
-    /* Set a background color that will be displayed
+  /* Set a background color that will be displayed
          while the background image is loading */
-    background-color: #464646;
-  }
-  @font-face {
-    font-family: Cinzel;
-    src: url('~assets/Cinzel-Black.ttf');
-  }
+  background-color: #464646;
+}
+@font-face {
+  font-family: Cinzel;
+  src: url('~assets/Cinzel-Black.ttf');
+}
 
-  .title {
-    font-family: Cinzel, serif;
-    font-weight: 300;
-    font-size: 100px;
-    color: #b30606;
-    letter-spacing: 1px;
-  }
+.title {
+  font-family: Cinzel, serif;
+  font-weight: 300;
+  font-size: 100px;
+  color: #b30606;
+  letter-spacing: 1px;
+}
 </style>
