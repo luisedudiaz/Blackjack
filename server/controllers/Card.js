@@ -21,7 +21,7 @@ function getDeckPromise() {
  */
 cardController.getDeck = async (req, res) => {
   try {
-    const deck = await getDeckPromise()
+    const deck = await Card.find({})
     return res.json({
       success: true,
       status: 200,

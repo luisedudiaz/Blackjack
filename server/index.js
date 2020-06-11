@@ -47,15 +47,17 @@ async function start() {
   require('./models/Game')
   require('./models/Player')
   const Game = mongoose.model('game')
-  const Player = mongoose.model('player')
   io.on('connection', (socket) => {
     socket.on('joinRoom', async ({ player, idGame }) => {
+      console.log(idGame)
       if (player && idGame) {
         socket.join(idGame)
         try {
-          const game = await Game.findOne({ _id: idGame })
+          const game = await Game.findById(idGame)
+          console.log(game)
           if (game) {
             const games = await Game.find({})
+            console.log(games)
             game.players.push(player)
             await game.save()
             io.to(idGame).emit('updateGame', game)
@@ -63,20 +65,43 @@ async function start() {
             games.forEach((game) => {
               rooms.push({
                 id: game._id,
-                players: game.player.length
+                players: game.players.length - 1
               })
             })
             socket.broadcast.emit('updateTable', rooms)
             socket.emit('newMessage', 'EMIT')
             socket.broadcast.to(idGame).emit('newMessage', 'BROADCAST')
           } else {
+            console.log(1)
             socket.emit('redirect')
           }
         } catch (e) {
+          console.log(e)
+          console.log(2)
           socket.emit('redirect')
         }
       } else {
+        console.log(3)
         socket.emit('redirect')
+      }
+    })
+
+    socket.on('changeTurn', async ({ game, oldIndex, newIndex }) => {
+      socket.join(game)
+      try {
+        console.log(oldIndex, newIndex)
+        const g = await Game.findById(game)
+        g.players[oldIndex].isPlaying = false
+        g.players[newIndex].isPlaying = true
+        g.turn = g.players[newIndex]
+        await g.save()
+        if (newIndex === g.players.length) {
+          io.to(game).emit('updateTurn', { newIndex, game, g, turn: g.turn })
+        } else {
+          io.to(game).emit('updateTurn', { newIndex, game, g, turn: g.turn })
+        }
+      } catch (e) {
+        console.log(e)
       }
     })
 
@@ -88,33 +113,36 @@ async function start() {
     const exitEvents = ['leftRoom', 'disconnect']
 
     exitEvents.forEach((event) => {
-      socket.on(event, async () => {
-        const id = socket.id
+      socket.on(event, async (id) => {
+        console.log(id)
         try {
-          const user = await Player.findOne({ socket: id })
-          if (user) {
-            try {
-              const game = await Game.findOne({ 'players._id': user._id })
-              if (game.players) {
-                game.players.pull({ _id: user._id })
-                await game.save()
-                try {
-                  const games = await Game.find({})
-                  io.to(game._id).emit('updateGame', game)
-                  socket.broadcast.to(game._id).emit('updateTable', games)
-                  socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
-                  socket.leave(game._id)
-                } catch (e) {
-                  console.log(e)
-                }
-              } else {
-                socket.emit('redirect', '1')
+          try {
+            const game = await Game.findOne({ 'players._id': id })
+            console.log(game)
+            if (game.players) {
+              game.players.pull({ _id: id })
+              await game.save()
+              try {
+                const games = await Game.find({})
+                const rooms = []
+                games.forEach((game) => {
+                  rooms.push({
+                    id: game._id,
+                    players: game.players.length - 1
+                  })
+                })
+                io.to(game._id).emit('updateGame', game)
+                io.emit('updateTable', rooms)
+                socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
+                socket.leave(game._id)
+              } catch (e) {
+                console.log(e)
               }
-            } catch (e) {
-              console.log(e)
+            } else {
+              socket.emit('redirect', '1')
             }
-          } else {
-            socket.emit('redirect', '2')
+          } catch (e) {
+            console.log(e)
           }
         } catch (e) {
           console.log(e)
