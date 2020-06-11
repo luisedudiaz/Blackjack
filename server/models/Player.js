@@ -5,14 +5,13 @@ const cardSchema = mongoose.model('card').schema
 const playerSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: {
-    type: String,
-    required: true
+    type: String
   },
   deck: [cardSchema],
   isPlaying: {
-    type: Boolean,
-    required: true
-  }
+    type: Boolean
+  },
+  socket: String
 })
 
 mongoose.model('player', playerSchema)

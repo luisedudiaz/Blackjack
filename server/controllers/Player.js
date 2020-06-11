@@ -11,7 +11,7 @@ function createHousePromise() {
   const id = new mongoose.Types.ObjectId()
   const housePlayer = new Player({
     _id: id,
-    name: `House-${id}`,
+    name: 'Dealer',
     deck: [],
     isPlaying: true
   })
@@ -63,6 +63,50 @@ playerController.getHousePlayer = (req, res) => {
         status: 500
       })
     })
+}
+
+/*
+ * Manages login logic
+ */
+playerController.login = async (req, res) => {
+  try {
+    const user = req.body.name
+    const socket = req.body.socket
+    const exists = await Player.exists({ name: user })
+
+    if (exists) {
+      const player = await Player.findOne({ name: user })
+      player.socket = socket
+      await player.save()
+      return res.json({
+        success: true,
+        status: 200,
+        player
+      })
+    } else {
+      const id = new mongoose.Types.ObjectId()
+      const doc = new Player({
+        _id: id,
+        name: user,
+        deck: [],
+        isPlaying: false,
+        socket
+      })
+      const player = await doc.save()
+      return res.json({
+        success: true,
+        status: 200,
+        player
+      })
+    }
+  } catch (e) {
+    res.json({
+      success: false,
+      message: 'Internal server error',
+      status: 500,
+      response: e
+    })
+  }
 }
 
 module.exports = {

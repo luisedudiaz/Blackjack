@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { player } = require('../../controllers/Player')
 
-router.get('/')
+router.post('/', player.login)
 
 router.get('/house', player.getHousePlayer)
 

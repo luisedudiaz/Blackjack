@@ -40,7 +40,7 @@ gameController.createGame = async (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     deck: cards,
     winner: '',
-    players: [housePlayer, player],
+    players: [housePlayer],
     turn: housePlayer,
     status: 1
   })
@@ -53,7 +53,8 @@ gameController.createGame = async (req, res) => {
         status: 200,
         message: 'Game created successfully',
         response: {
-          id: data._id
+          id: data._id,
+          house: data.players[0]
         }
       })
     })
@@ -63,6 +64,44 @@ gameController.createGame = async (req, res) => {
         status: 500,
         message: 'Oh no, something went wrong creating the game',
         response: e
+      })
+    })
+}
+
+gameController.getGames = (req, res) => {
+  Game.find()
+    .then((data) => {
+      const games = []
+      data.forEach((item) => {
+        games.push({ id: item._id, players: item.players.length - 1 })
+      })
+      return res.json({
+        success: true,
+        status: 200,
+        games,
+        empty: games.length === 0
+      })
+    })
+    .catch(() => {
+      return res.json({
+        success: false,
+        status: 500,
+        message: 'Something went wrong'
+      })
+    })
+}
+
+gameController.getGame = (req, res) => {
+  const gameId = req.params.id
+  Game.findOne({ id: gameId })
+    .then((data) => {
+      res.json({
+        game: data
+      })
+    })
+    .catch((err) => {
+      res.json({
+        error: err
       })
     })
 }

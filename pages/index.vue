@@ -1,19 +1,38 @@
 <template>
   <div class="background">
-    <div class="container">
-      <div>
-        <h1 class="title">
-          Blackjack Game
-        </h1>
-      </div>
-    </div>
+    <b-container>
+      <b-row>
+        <b-col>
+          <h1 class="title">
+            Blackjack
+          </h1>
+          <div v-if="$auth.loggedIn">
+            <b-form-input
+              size="md"
+              placeholder="Ingresa ID de sala"
+              @keyup.enter="goToRoom"
+            ></b-form-input>
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
+
 <script>
 export default {
-  auth: false
+  methods: {
+    goToRoom(e) {
+      e.preventDefault()
+      const room = e.target.value
+      if (room !== '') {
+        this.$router.push(`/salas/${room}`)
+      }
+    }
+  }
 }
 </script>
+
 <style>
 .container {
   margin: 0 auto;
@@ -57,20 +76,8 @@ export default {
 .title {
   font-family: Cinzel, serif;
   font-weight: 300;
-  font-size: 100px;
+  font-size: 90px;
   color: #b30606;
   letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #000000;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
 }
 </style>
