@@ -91,4 +91,19 @@ gameController.getGames = (req, res) => {
     })
 }
 
+gameController.getGame = (req, res) => {
+  const gameId = req.params.id
+  Game.findOne({ id: gameId })
+    .then((data) => {
+      res.json({
+        game: data
+      })
+    })
+    .catch((err) => {
+      res.json({
+        error: err
+      })
+    })
+}
+
 module.exports = gameController
