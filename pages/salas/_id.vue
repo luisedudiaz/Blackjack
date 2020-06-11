@@ -46,7 +46,16 @@
                 <b-button variant="primary" @click="getCardAndUpdateDealerDeck">
                   Pedir carta
                 </b-button>
-                <b-button variant="success" href="#">Pasar</b-button>
+                <b-button
+                  variant="success"
+                  @click="
+                    changeTurn({
+                      id: $store.state.player._id,
+                      game: $route.params.id
+                    })
+                  "
+                  >Pasar</b-button
+                >
               </div>
               <div v-else class="text-center">
                 Espera a tu turno
@@ -88,7 +97,7 @@ export default {
     this.leftRoom(this.$store.state.player._id)
   },
   methods: {
-    ...mapActions(['joinRoom', 'leftRoom', 'setGame']),
+    ...mapActions(['joinRoom', 'leftRoom', 'setGame', 'changeTurn']),
     getCardAndUpdateDealerDeck() {
       const deck = { deck: this.$store.state.deck }
       console.log(`${deck}`)

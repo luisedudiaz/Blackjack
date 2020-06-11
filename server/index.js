@@ -86,6 +86,25 @@ async function start() {
       }
     })
 
+    socket.on('changeTurn', async ({ game, oldIndex, newIndex }) => {
+      socket.join(game)
+      try {
+        console.log(oldIndex, newIndex)
+        const g = await Game.findById(game)
+        g.players[oldIndex].isPlaying = false
+        g.players[newIndex].isPlaying = true
+        g.turn = g.players[newIndex]
+        await g.save()
+        if (newIndex === g.players.length) {
+          io.to(game).emit('updateTurn', { newIndex, game, g, turn: g.turn })
+        } else {
+          io.to(game).emit('updateTurn', { newIndex, game, g, turn: g.turn })
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    })
+
     socket.on('setTypingStatus', ({ room, typingStatus, id }) => {
       /* usersDB.setTypingStatus(id, typingStatus)
       // io.to(room).emit('updateUsers', usersDB.getUsersByRoom(room)) */
