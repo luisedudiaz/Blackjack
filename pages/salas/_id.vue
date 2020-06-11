@@ -72,11 +72,6 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'IdVue',
-  data() {
-    return {
-      c: {}
-    }
-  },
   computed: {
     ...mapGetters(['state', 'allOtherPlayers'])
   },
@@ -85,9 +80,6 @@ export default {
       this.setGame(res.game)
       this.joinRoom(this.$route.params.id)
     })
-  },
-  mounted() {
-    this.c = JSON.parse(JSON.stringify(this.$store.state.game))
   },
   destroyed() {
     this.leftRoom()
