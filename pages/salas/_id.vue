@@ -42,8 +42,10 @@
               <hr class="my-4" />
               <p>Tu mazo: {{ state.player.deck }}</p>
               <br />
-              <div v-if="state.turn.name === state.player.name">
-                <b-button variant="primary" href="#">Pedir carta</b-button>
+              <div v-if="state.turn.name !== state.player.name">
+                <b-button variant="primary" @click="getCardAndUpdateDealerDeck">
+                  Pedir carta
+                </b-button>
                 <b-button variant="success" href="#">Pasar</b-button>
               </div>
               <div v-else class="text-center">
@@ -73,11 +75,11 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'IdVue',
   computed: {
-    ...mapGetters(['state', 'allOtherPlayers'])
+    ...mapGetters(['state', 'allOtherPlayers', 'deck'])
   },
   beforeCreate() {
     this.$axios.get(`/games?id=${this.$route.params.id}`).then((res) => {
-      this.setGame(res.game)
+      this.setGame(res.data.game)
       this.joinRoom(this.$route.params.id)
     })
   },
@@ -85,7 +87,27 @@ export default {
     this.leftRoom()
   },
   methods: {
-    ...mapActions(['joinRoom', 'leftRoom', 'setGame'])
+    ...mapActions(['joinRoom', 'leftRoom', 'setGame']),
+    getCardAndUpdateDealerDeck() {
+      const deck = { deck: this.$store.state.deck }
+      console.log(`${deck}`)
+      this.$axios
+        .get('/cards/card', deck)
+        .then((data) => {
+          // eslint-disable-next-line no-unused-vars
+          const carta = data.card
+          // eslint-disable-next-line no-unused-vars
+          const newDeck = data.deck
+        })
+        .catch(() => {
+          this.$bvToast.toast('Error al obtener carta', {
+            title: 'Error',
+            variant: 'danger',
+            autoHideDelay: 3000,
+            appendToast: true
+          })
+        })
+    }
   }
 }
 </script>

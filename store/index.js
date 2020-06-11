@@ -5,7 +5,8 @@ export const state = () => ({
   game: {},
   messages: [],
   rooms: [],
-  winner: ''
+  winner: '',
+  deck: []
 })
 
 export const getters = {
@@ -16,7 +17,8 @@ export const getters = {
   allOtherPlayers: (state) => {
     return state.players.filter((player) => player._id !== state.player._id)
   },
-  rooms: (state) => state.rooms
+  rooms: (state) => state.rooms,
+  deck: (state) => state.deck
 }
 
 export const mutations = {
@@ -25,6 +27,8 @@ export const mutations = {
   },
   SET_GAME(state, game) {
     state.game = game
+    console.log(game)
+    state.deck = game.deck
   },
   SET_ROOMS(state, rooms) {
     state.rooms = rooms
@@ -36,6 +40,7 @@ export const mutations = {
     state.players = []
     state.turn = {}
     state.winner = {}
+    state.deck = []
   },
   SOCKET_newMessage(state, msg) {
     state.messages = msg

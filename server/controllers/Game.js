@@ -1,7 +1,8 @@
 require('../models/Game')
 const mongoose = require('mongoose')
 const { housePlayerPromise } = require('./Player')
-const { deckPromise } = require('./Card')
+require('../models/Card')
+const Card = mongoose.model('card')
 const gameController = {}
 
 const Game = mongoose.model('game')
@@ -23,9 +24,9 @@ gameController.createGame = async (req, res) => {
   }
 
   try {
-    const data = await Promise.all([housePlayerPromise(), deckPromise()])
+    const data = await Promise.all([housePlayerPromise()])
     housePlayer = data[0]
-    cards = data[1]
+    cards = await Card.find({})
   } catch (e) {
     res.json({
       success: false,
