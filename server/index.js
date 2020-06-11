@@ -115,7 +115,7 @@ async function start() {
                     })
                   })
                   io.to(game._id).emit('updateGame', game)
-                  socket.broadcast.to(game._id).emit('updateTable', rooms)
+                  socket.broadcast.emit('updateTable', rooms)
                   socket.broadcast.to(game._id).emit('newMessage', 'BROADCAST')
                   socket.leave(game._id)
                 } catch (e) {
