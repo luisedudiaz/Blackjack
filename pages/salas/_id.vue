@@ -47,7 +47,7 @@
               <p>Tu mazo: {{ getPlayerDeck() }}</p>
               <br />
               <div v-if="!lost">
-                <div v-if="state.turn.name === state.player.name">
+                <div v-if="state.turn.name !== state.player.name">
                   <b-button
                     variant="primary"
                     @click="getCardAndUpdateDealerDeck"
